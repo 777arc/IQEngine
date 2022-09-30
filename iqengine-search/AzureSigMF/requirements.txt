@@ -1,0 +1,5 @@
+azure-identity==1.10.0
+azure-storage-blob==12.13.1
+pydantic==1.10.2
+pymongo==4.2.0
+git+https://github.com/gnuradio/SigMF.git@1eef44a67636ab15078e7eecc00144b9e18cdaa3#egg=sigmf
