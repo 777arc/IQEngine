@@ -6,7 +6,11 @@ import ConnectionStringInput from './Components/ConnectionString';
 import JsonDataDisplay from './Components/JSONDataDisplay';
 import React , { Component } from 'react';
 import GetFilesFromBlob from './Components/DataFetcher';
-
+import {
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 
 class App extends Component {
   constructor(props){
@@ -33,11 +37,31 @@ class App extends Component {
 
     render() {
       return (
-        <>
-        <div><center><h1 class="display-1"><b>IQEngine</b></h1></center></div>
-        <ConnectionStringInput ConnStrHandleClick={this.ConnStrHandleClick}/>
-        <JsonDataDisplay data={this.state.data}/>
-        </>
+          <div>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+            </ul>
+    
+            <hr />
+            
+            <Routes>
+              <Route exact path="/" element={
+                <>
+                <div><center><h1 className="display-1"><b>IQEngine</b></h1></center></div>
+                <ConnectionStringInput ConnStrHandleClick={this.ConnStrHandleClick}/>
+                <JsonDataDisplay data={this.state.data}/>
+                </>
+              } />
+            </Routes>
+          </div>
       );
     }
   }

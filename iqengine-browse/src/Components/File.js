@@ -13,11 +13,11 @@ export default function FileRow({i, info}) {
     return (
         <tr key={i}>
             <td><div className="zoom"><img src={info.thumbnailUrl} alt="Spectrogram Thumbnail" style={{width:"200px", height:"100px"}} /></div></td>
-            <td class="align-middle"><a href="#" target="_blank">{info.name}</a></td>
-            <td class="align-middle">{info.dataType}</td>
-            <td class="align-middle">{info.frequency}</td>
-            <td class="align-middle">{info.sampleRate}</td>
-            <td class="align-middle">
+            <td className="align-middle"><a href="#" target="_blank">{info.name}</a></td>
+            <td className="align-middle">{info.dataType}</td>
+            <td className="align-middle">{info.frequency}</td>
+            <td className="align-middle">{info.sampleRate}</td>
+            <td className="align-middle">
                 <div>
                     <p onClick={toggle} ><a href="#">{info.numberOfAnnotation}</a></p>
                     <Modal isOpen={modal} toggle={toggle} size='lg'>
@@ -35,7 +35,7 @@ export default function FileRow({i, info}) {
                     </Modal>
                 </div>
             </td>
-            <td class="align-middle">{info.author}</td>
+            <td className="align-middle">{info.author}</td>
         </tr>
     )
  }

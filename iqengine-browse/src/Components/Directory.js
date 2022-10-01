@@ -28,7 +28,7 @@ const Directory = ({ id, files }) => {
         return (
             <>
                 <tr key={id}>
-                    <td class="align-middle">
+                    <td className="align-middle">
                         <p onClick={() => toggleExpanded(!isExpanded)}>
                             {
                                 isExpanded ? <StyledOpenFolderIcon /> : <StyledFolderIcon />
