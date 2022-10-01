@@ -9,7 +9,8 @@ import GetFilesFromBlob from './Components/DataFetcher';
 import {
   Routes,
   Route,
-  Link
+  Link,
+  useParams
 } from "react-router-dom";
 
 class App extends Component {
@@ -35,6 +36,7 @@ class App extends Component {
     }
   }
 
+  
     render() {
       return (
           <div>
@@ -43,7 +45,7 @@ class App extends Component {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
+                <Link to="/spectrogram/testttt">About</Link>
               </li>
               <li>
                 <Link to="/dashboard">Dashboard</Link>
@@ -60,10 +62,21 @@ class App extends Component {
                 <JsonDataDisplay data={this.state.data}/>
                 </>
               } />
+
+              <Route path="/spectrogram/:recording" element={<FlightList data={this.state.data} />} />
             </Routes>
           </div>
       );
     }
   }
+
+export function FlightList(props) {
+    let { recording } = useParams(); // Unpacking and retrieve id
+    return (
+        <div>
+            {recording}
+        </div>
+    )
+}
 
 export default App;

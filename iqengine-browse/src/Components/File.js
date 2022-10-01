@@ -13,7 +13,7 @@ export default function FileRow({i, info}) {
     return (
         <tr key={i}>
             <td><div className="zoom"><img src={info.thumbnailUrl} alt="Spectrogram Thumbnail" style={{width:"200px", height:"100px"}} /></div></td>
-            <td className="align-middle"><a href="#" target="_blank">{info.name}</a></td>
+            <td className="align-middle"><a href={'spectrogram/' + info.name}>{info.name}</a></td>
             <td className="align-middle">{info.dataType}</td>
             <td className="align-middle">{info.frequency}</td>
             <td className="align-middle">{info.sampleRate}</td>
