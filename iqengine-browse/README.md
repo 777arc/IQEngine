@@ -8,6 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 1. Install Node from https://nodejs.org/en/download/
 2. `npm install react-scripts`
+3. Edit the .env file and paste in your SAS token for the container
 
 ## Available Scripts
 
