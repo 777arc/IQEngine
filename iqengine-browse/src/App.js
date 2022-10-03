@@ -2,10 +2,23 @@
 // Licensed under the MIT License.
 
 import './App.css';
-import ConnectionStringInput from './Components/ConnectionString';
-import JsonDataDisplay from './Components/JSONDataDisplay';
 import React , { Component } from 'react';
-import GetFilesFromBlob from './Components/DataFetcher';
+import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
+import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
+import GetFilesFromBlob from './Components/FileBrowser/DataFetcher';
+
+import Sidebar from "./Components/Spectrogram/sidebar";
+import './Components/Spectrogram/sidebar.css';
+import { SpectrogramPanel } from './Components/Spectrogram/spectrogram-panel';
+import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+
+import '@fortawesome/react-fontawesome';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import store from './store'
+import { fetchMoreData } from './features/blob/blobSlice'
+import { fetchMeta } from './features/meta/metaSlice'
+import { Provider } from 'react-redux'
+
 import {
   Routes,
   Route,
@@ -71,11 +84,29 @@ class App extends Component {
   }
 
 export function FlightList(props) {
-    let { recording } = useParams(); // Unpacking and retrieve id
+    let { recording } = useParams(); // so we know which recording was clicked on
+
+    store.dispatch(fetchMoreData());
+    store.dispatch(fetchMeta);
+
     return (
+      <Provider store={store}>
         <div>
             {recording}
+
+          <Container fluid>
+           <Row>
+               <Col xs={2} id="sidebar-wrapper">      
+                 <Sidebar />
+               </Col>
+               <Col  xs={10} id="page-content-wrapper">
+                <SpectrogramPanel/>
+               </Col> 
+           </Row>
+       </Container>
+
         </div>
+        </Provider>
     )
 }
 

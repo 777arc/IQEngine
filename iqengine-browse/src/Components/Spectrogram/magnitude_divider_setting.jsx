@@ -3,7 +3,7 @@
 
 import React, { useState} from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { updateMagnitudeDivider } from '../features/fft/fftSlice'
+import { updateMagnitudeDivider } from '../../features/fft/fftSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';

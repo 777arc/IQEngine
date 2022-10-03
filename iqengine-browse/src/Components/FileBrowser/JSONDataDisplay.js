@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React, {useState} from 'react'
-import '../App.css'
+import '../../App.css'
 // import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import GroupByFolder from '../GroupByFolder';
+import GroupByFolder from '../../GroupByFolder';
 import Directory from './Directory';
 
  function JsonDataDisplay({data}){

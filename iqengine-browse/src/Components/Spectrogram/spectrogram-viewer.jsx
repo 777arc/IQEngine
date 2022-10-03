@@ -2,11 +2,8 @@
 // Licensed under the MIT License.
 
 import { useSelector } from 'react-redux'
-import { select_fft } from '../selector'
-//import { fetchMoreData } from '../features/blob/blobSlice'
-//import { selectFftSize } from '../features/fft/fftSlice'
+import { select_fft } from '../../selector'
 import React, { useRef } from 'react'
-//import './spectrogram-viewer.css'; // Tell webpack that Button.js uses these styles
 
 const SpectrogramViewer = (props) => {
     let select_fft_return = useSelector(state => select_fft(state));
