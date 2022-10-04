@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 from pymongo.collection import Collection
 from pymongo.errors import DuplicateKeyError
 
