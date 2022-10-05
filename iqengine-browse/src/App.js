@@ -3,21 +3,20 @@
 
 import './App.css';
 import React , { Component } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
-import GetFilesFromBlob from './Components/FileBrowser/DataFetcher';
 
 import Sidebar from "./Components/Spectrogram/sidebar";
 import './Components/Spectrogram/sidebar.css';
 import { SpectrogramPanel } from './Components/Spectrogram/spectrogram-panel';
-import {Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import {Container, Row, Col } from "react-bootstrap";
 
 import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import store from './store'
 import { fetchMoreData } from './features/blob/blobSlice'
 import { fetchMeta } from './features/meta/metaSlice'
-import { Provider } from 'react-redux'
 
 import {
   Routes,
@@ -29,27 +28,27 @@ import {
 class App extends Component {
   constructor(props){
     super(props);
+    this.setData.bind(this);
+    this.setConnectionInfo.bind(this);
     this.state = {
       accountName: "",
       containerName: "",
       sasToken: "",
       data: []
     };
-
-    this.ConnStrHandleClick = this.ConnStrHandleClick.bind(this);
   }
 
-  ConnStrHandleClick = async (e) => {
-    e.preventDefault()
-    if(e.target.accountNameRef.value !== "" && e.target.containerNameRef.value !== "" && e.target.sasTokenRef.value !== ""){
-      this.setState( { accountName: e.target.accountNameRef.value } );
-      this.setState( { containerName: e.target.containerNameRef.value } );
-      this.setState( { sasToken: e.target.sasTokenRef.value } );
-      this.setState({data: await GetFilesFromBlob(e.target.accountNameRef.value, e.target.containerNameRef.value, e.target.sasTokenRef.value)});
-    }
+  // Allows child to set state in parent component (this component)
+  setData = (x) => {
+    this.setState({data: x});
   }
 
-  
+  setConnectionInfo = (x) => {
+    this.setState({accountName: x.accountName});
+    this.setState({accountName: x.containerName});
+    this.setState({accountName: x.sasToken});
+  }
+
     render() {
       return (
           <div>
@@ -66,12 +65,14 @@ class App extends Component {
             </ul>
     
             <hr />
+
+           
             
             <Routes>
-              <Route exact path="/" element={
+              <Route exact path="/" element={ 
                 <>
                 <div><center><h1 className="display-1"><b>IQEngine</b></h1></center></div>
-                <ConnectionStringInput ConnStrHandleClick={this.ConnStrHandleClick}/>
+                <ConnectionStringInput setData = {this.setData} setConnectionInfo = {this.setConnectionInfo} />
                 <JsonDataDisplay data={this.state.data}/>
                 </>
               } />
@@ -90,7 +91,6 @@ export function FlightList(props) {
     store.dispatch(fetchMeta);
 
     return (
-      <Provider store={store}>
         <div>
             {recording}
 
@@ -106,7 +106,6 @@ export function FlightList(props) {
        </Container>
 
         </div>
-        </Provider>
     )
 }
 
