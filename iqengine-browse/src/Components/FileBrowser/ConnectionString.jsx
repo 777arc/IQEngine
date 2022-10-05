@@ -29,28 +29,27 @@ function ConnectionStringInput (props) {
     }
 
     return (
-        <div id='ConnectionStringContainer'>
-                <div className="form-group">
+      <div id='ConnectionStringContainer'>
+        <div className="form-group">
 
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Storage Account Name:</Form.Label>
-                        <Form.Control type="text"  value={accountName} onChange={onAccountNameChange} size="sm"  />
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Storage Account Name:</Form.Label>
+            <Form.Control type="text"  value={accountName} onChange={onAccountNameChange} size="sm"  />
 
-                        <Form.Label>Container Name:</Form.Label>
-                        <Form.Control type="text"  value={containerName} onChange={onContainerNameChange} size="sm"  />
-                        
-                        <Form.Label>SAS Token for Container:</Form.Label>
-                        <Form.Control type="text"  value={sasToken} onChange={onSasTokenChange} size="sm"  />
-                    </Form.Group>
+            <Form.Label>Container Name:</Form.Label>
+            <Form.Control type="text"  value={containerName} onChange={onContainerNameChange} size="sm"  />
+            
+            <Form.Label>SAS Token for Container:</Form.Label>
+            <Form.Control type="text"  value={sasToken} onChange={onSasTokenChange} size="sm"  />
+          </Form.Group>
 
-                    <Button className="btn btn-secondary" onClick={onSubmit}>
-                        <FontAwesomeIcon icon={faArrowRight} />
-                    </Button>
+          <Button className="btn btn-secondary" onClick={onSubmit}>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </Button>
 
-                </div>
         </div>
+      </div>
     )
-    
 }
 
 export default ConnectionStringInput;
