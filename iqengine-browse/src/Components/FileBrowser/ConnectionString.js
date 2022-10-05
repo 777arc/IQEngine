@@ -20,7 +20,7 @@ class ConnectionStringInput extends Component {
             newState.containerName = e.target.containerNameRef.value;
             newState.sasToken = e.target.sasTokenRef.value;
             this.props.setConnectionInfo(newState);
-            this.props.setData(await GetFilesFromBlob(e.target.accountNameRef.value, e.target.containerNameRef.value, e.target.sasTokenRef.value));
+            this.props.setRecordingList(await GetFilesFromBlob(e.target.accountNameRef.value, e.target.containerNameRef.value, e.target.sasTokenRef.value));
         }
     }
 
