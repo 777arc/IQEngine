@@ -1,20 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { useParams } from "react-router-dom";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
-// Blob service SAS URL string of the storage account, not the container
-const blobSasUrl = process.env.REACT_APP_AZURE_BLOB_SAS_URL;
-const blobServiceClient = new BlobServiceClient(blobSasUrl);
-const containerName = "testsigmfrecordings"
-const containerClient = blobServiceClient.getContainerClient(containerName);
-let blobName = "cellular_downlink_880MHz.sigmf-meta"
-const blobClient = containerClient.getBlobClient(blobName);
-
 
 const initialState = {annotations: [],
-        captures: [],
-        global: {}};
-
+                      captures: [],
+                      global: {}};
 
 export const selectMetaAnnotations = state => state.meta.annotations;
 export const selectMetaCaptures = state => state.meta.captures;
@@ -35,8 +27,24 @@ export default function metaReducer(state = initialState, action) {
 }
 
 // Thunk function
-export async function fetchMeta(dispatch, getState) {
+export async function FetchMeta(dispatch, getState) {
     console.log("running fetchMeta")
+    let state = getState();
+    let accountName = state.connection.accountName;
+    let containerName = state.connection.containerName;
+    let sasToken = state.connection.sasToken;
+
+    let blobName = useParams().recording + '.sigmf-meta'; // so we know which recording was clicked on
+    console.log(blobName);
+    
+    if (containerName == "") {
+        console.error("container name was not filled out for some reason");
+    }
+
+    // Get the blob client
+    const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(blobName);
 
     const downloadBlockBlobResponse = await blobClient.download();
     const blob = await downloadBlockBlobResponse.blobBody;

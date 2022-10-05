@@ -2,7 +2,10 @@
 // Licensed under the MIT License.
 
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { useSelector, useDispatch } from 'react-redux'
+
 const { BlobServiceClient } = require("@azure/storage-blob");
+
 // Blob service SAS URL string of the storage account, not the container
 console.log("got here");
 const blobSasUrl = process.env.REACT_APP_AZURE_BLOB_SAS_URL;
@@ -17,8 +20,8 @@ const blobClient = containerClient.getBlobClient(blobName);
 const initialState = {size: 0, status: "idle", scrollOffset: 0};
 window.iq_data = [];   // This is GROSS!!! but it works?! I need a global way to store large binary variables.
 
-export const fetchMoreData = createAsyncThunk("blob/fetchMoreData",  async (arg,{ getState}) => {
-    
+export const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,{ getState}) => {
+
     try {
     var startTime = performance.now()
     const state = getState();
@@ -59,13 +62,13 @@ export const fetchMoreData = createAsyncThunk("blob/fetchMoreData",  async (arg,
 const blobSlice = createSlice({
     name: "blob",
     initialState,
-    reducers: {setScrollOffset: (state,action) => {
-        state.scrollOffset = action.payload;
-    }},
+    reducers: {
+        setScrollOffset: (state,action) => { state.scrollOffset = action.payload; }
+    },
     extraReducers: (builder) => {
-        builder.addCase(fetchMoreData.pending, (state, action) => {
+        builder.addCase(FetchMoreData.pending, (state, action) => {
             state.status = "loading";
-        }).addCase(fetchMoreData.fulfilled, (state, action) => {
+        }).addCase(FetchMoreData.fulfilled, (state, action) => {
             
             let size = window.iq_data.length + action.payload.length;  // Don't use byte length because the new array has to be specified by the num of elements not bytes
             state.status = "idle";
@@ -84,7 +87,7 @@ const blobSlice = createSlice({
             new_iq_data.set(window.iq_data, 0);
             new_iq_data.set(action.payload, window.iq_data.length);  // again this is elements, not bytes
             window.iq_data = new_iq_data;
-        }).addCase(fetchMoreData.rejected, (state, action) => {
+        }).addCase(FetchMoreData.rejected, (state, action) => {
             state.status = "error";
         })
     }

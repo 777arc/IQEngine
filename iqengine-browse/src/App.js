@@ -25,11 +25,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.setRecordingList.bind(this);
-    this.setConnectionInfo.bind(this);
     this.state = {
-      accountName: "",
-      containerName: "",
-      sasToken: "",
       recordingList: [] // look at the end of DataFetcher to see how this data structure works
     };
   }
@@ -37,12 +33,6 @@ class App extends Component {
   // Allows child to set state in parent component (this component)
   setRecordingList = (x) => {
     this.setState({recordingList: x});
-  }
-
-  setConnectionInfo = (x) => {
-    this.setState({accountName: x.accountName});
-    this.setState({containerName: x.containerName});
-    this.setState({sasToken: x.sasToken});
   }
 
     render() {
@@ -65,13 +55,13 @@ class App extends Component {
               <Route exact path="/" element={ 
                 <>
                 <div><center><h1 className="display-1"><b>IQEngine</b></h1></center></div>
-                <ConnectionStringInput setRecordingList={this.setRecordingList} setConnectionInfo={this.setConnectionInfo} />
+                <ConnectionStringInput setRecordingList={this.setRecordingList} />
                 <JsonDataDisplay data={this.state.recordingList}/>
                 </>
               } />
 
               <Route path="/spectrogram/:recording" element={
-                <SpectrogramPage accountName={this.state.accountName} containerName={this.state.containerName} sasToken={this.state.sasToken} />
+                <SpectrogramPage />
               } />
             </Routes>
           </div>
