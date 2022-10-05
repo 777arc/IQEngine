@@ -2,7 +2,6 @@ import { SpectrogramPanel } from '../Spectrogram/spectrogram-panel';
 import {Container, Row, Col } from "react-bootstrap";
 import { fetchMoreData } from '../../features/blob/blobSlice'
 import { fetchMeta } from '../../features/meta/metaSlice'
-import store from '../../store'
 import { useSelector, useDispatch } from 'react-redux'
 import Sidebar from "../Spectrogram/sidebar";
 import {
@@ -18,8 +17,9 @@ function SpectrogramPage({accountName, containerName, sasToken}) {
     console.log("GOT HERE");
     console.log(accountName)
 
-    store.dispatch(fetchMoreData());
-    store.dispatch(fetchMeta);
+    const dispatch = useDispatch();
+    dispatch(fetchMoreData());
+    dispatch(fetchMeta);
 
 
     return (
