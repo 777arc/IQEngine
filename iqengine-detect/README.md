@@ -1,12 +1,19 @@
-## To write your own detection function
+## Running the backend
+
+`cd backend`
+`pip install -r requirements.txt` (might need sudo if on linux, might need --user if on windows)
+`uvicorn main:app --reload`
+or on Windows:
+`python -m uvicorn main:app --reload`
+
+## Write your own detection function
 
 ### Function Input:
 
-A JSON payload with the following fields (will appear as a dict in Python)
-- `samples`: IQ samples (they will show up either as floats or ints)
+- `samples`: IQ samples in the form of complex float32 (np.complex64)
 - `sample_rate`: sample rate of the IQ samples in Hz
 - `center_freq`: (default = 0) optional center (RF) frequency of the signal in Hz
-- `detector_settings`: a JSON/dict containing key/value pairs of detector settings which will be passed into the detector as a dict
+- `detector_settings`: a dict containing key/value pairs of detector settings which will be passed into the detector
 
 ### Function Output:
 

@@ -9,15 +9,10 @@ import time
 import cv2 as cv
 import json
 
-def detect(function_input):
-    samps = function_input["samples"]
-    sample_rate = function_input["sample_rate"]
-    center_freq = function_input["center_freq"]
-    detector_settings = function_input["detector_settings"]
-
-    noise_params = get_noise_floor(samps, sample_rate, n_floor_window_bins=detector_settings['time_window_size'])
+def detect(samples, sample_rate, center_freq, detector_settings):
+    noise_params = get_noise_floor(samples, sample_rate, n_floor_window_bins=detector_settings['time_window_size'])
     start_time = time.time()
-    anots = highlight_energy(samples=samps,
+    anots = highlight_energy(samples=samples,
                              samp_rate=sample_rate,
                              fft_size=1024,
                              window_size=detector_settings['time_window_size'],
@@ -35,7 +30,7 @@ def detect(function_input):
 
     # Creates spectrogram with rectangles and saves to png file
     if True:
-        plot_spectrogram(samps, sample_rate, rects)
+        plot_spectrogram(samples, sample_rate, rects)
 
     return anots
 
@@ -185,14 +180,9 @@ if __name__ == "__main__":
         meta_data = json.load(f)
     sample_rate = meta_data["global"]["core:sample_rate"]
     center_freq = meta_data["captures"][0]['core:frequency']
-    samps = np.fromfile(fname + '.sigmf-data', dtype=np.complex64)
+    samples = np.fromfile(fname + '.sigmf-data', dtype=np.complex64)
 
     detector_settings = {'time_window_size': 10, 'power_threshold_db': 20, 'time_margin_seconds': 0.001, 'min_bw': 10e3}
 
-    function_input = {"samples": samps,
-                      "sample_rate": sample_rate,
-                      "center_freq": center_freq,
-                      "detector_settings": detector_settings}
-
-    annotations = detect(function_input)
+    annotations = detect(samples, sample_rate, center_freq, detector_settings)
     print(annotations)
