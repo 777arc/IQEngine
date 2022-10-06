@@ -1,70 +1,25 @@
-# Getting Started with Create React App
+## To write your own detection function
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Function Input:
 
-## Available Scripts
+A JSON payload with the following fields (will appear as a dict in Python)
+- `samples`: IQ samples (they will show up either as floats or ints)
+- `sample_rate`: sample rate of the IQ samples in Hz
+- `center_freq`: (default = 0) optional center (RF) frequency of the signal in Hz
+- `detector_settings`: a JSON/dict containing key/value pairs of detector settings which will be passed into the detector as a dict
 
-In the project directory, you can run:
+### Function Output:
 
-### `npm start`
+A JSON payload with the following fields (will be a dict in python returned from your function)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- `annotations`: A list of SigMF annotations, where each one has the following fields.  Only sample_start and sample_count are required.  If your detector is able to detect the frequency range of each emission, we suggest also populating freq_lower_edge and freq_upper_edge.  If your detector does any sort of classification or SNR detection, you can use the label field and it will show up on the spectrogram as text, so it is recommended to keep it short.  The comment field and generator is for additional info that won't show up on the spectrogram. 
+  - `core:sample_start` (required) [int] the sample index of the detection
+  - `core:sample_count` (required) [int] the number of samples of the detection
+  - `core:freq_lower_edge` [float] the frequency (Hz) of the lower edge of the feature
+  - `core:freq_upper_edge` [float] the frequency (Hz) of the upper edge of the feature
+  - `core:label` [string] short form human/machine-readable label
+  - `core:comment` [string] human-readable comment
+  - `core:generator`	[string] human-readable name of the entity that created this annotation, such as the name of your detector
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Adding your function to the backend service
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

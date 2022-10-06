@@ -4,11 +4,40 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.patches import Rectangle
-import sigmf
 from collections import deque
 import time
 import cv2 as cv
+import json
 
+def detect(function_input):
+    samps = function_input["samples"]
+    sample_rate = function_input["sample_rate"]
+    center_freq = function_input["center_freq"]
+    detector_settings = function_input["detector_settings"]
+
+    noise_params = get_noise_floor(samps, sample_rate, n_floor_window_bins=detector_settings['time_window_size'])
+    start_time = time.time()
+    anots = highlight_energy(samples=samps,
+                             samp_rate=sample_rate,
+                             fft_size=1024,
+                             window_size=detector_settings['time_window_size'],
+                             noise_power=noise_params['min_pwr'],
+                             pwr_thresh_db=detector_settings['power_threshold_db'],
+                             time_margin=detector_settings['time_margin_seconds'],
+                             center_freq=center_freq,
+                             min_bw=detector_settings['min_bw'])
+    print(f"detection took {time.time() - start_time} seconds")
+
+    rects = []
+    for a in anots:
+        td = {'start_samp':a['core:sample_start'],'end_samp':a['core:sample_start']+a['core:sample_count'],'start_freq':a['core:freq_lower_edge']-center_freq,'end_freq': a['core:freq_upper_edge']-center_freq, 'min_pwr':123}
+        rects.append(td)
+
+    # Creates spectrogram with rectangles and saves to png file
+    if True:
+        plot_spectrogram(samps, sample_rate, rects)
+
+    return anots
 
 def get_noise_floor(samps, sample_rate, fft_size=1024, n_floor_window_bins=10, n_random_spots=5):
     # this function does an fft of size {fft_size} at {n_random_spots} different locations
@@ -33,7 +62,7 @@ def get_noise_floor(samps, sample_rate, fft_size=1024, n_floor_window_bins=10, n
                 res = {'start_samp':fft_loc,'end_samp':fft_loc+fft_size,'start_freq':freq_list[idx],'end_freq': freq_list[idx+n_floor_window_bins], 'min_pwr':min_pwr}
     return res
 
-def spectrogram(x, sample_rate,box_params=None):
+def plot_spectrogram(x, sample_rate, box_params=None):
     fft_size = 1024
     num_rows = int(np.floor(len(x)/fft_size))
     spectrogram = np.zeros((num_rows, fft_size))
@@ -57,7 +86,7 @@ def spectrogram(x, sample_rate,box_params=None):
             box_duration = (end_time-start_time)
             rect = Rectangle((start_freq,start_time),freq_width,box_duration,linewidth=1,edgecolor='r',facecolor='none')
             ax.add_patch(rect)
-    plt.savefig('../iq-engine/src/annotated_spectrogram.png')
+    plt.savefig('annotated_spectrogram.png')
 
 def highlight_energy(samples, samp_rate, fft_size, window_size, noise_power, pwr_thresh_db, time_margin, center_freq, min_bw):
     #samples: IQ samples
@@ -67,8 +96,7 @@ def highlight_energy(samples, samp_rate, fft_size, window_size, noise_power, pwr
     #noise_power: reference power for comparison to determine if above threshold
     #pwr_thresh_db: db above noise power required to be classified as a signal
     #time_margin: time before and after actual power detected to be included as part of annotation
-    
-    
+
     num_rows = int(np.floor(len(samples)/fft_size))
     detections = np.zeros((num_rows, fft_size - window_size))
     pwr_thresh_lin = np.power(10,pwr_thresh_db/10.0)
@@ -102,7 +130,8 @@ def highlight_energy(samples, samp_rate, fft_size, window_size, noise_power, pwr
     gray_smooth = (gray_smooth * 255 / np.max(gray_smooth)).astype('uint8')
     threshold = 127 # TWEAKABLE PARAM
     _, thresh = cv.threshold(gray_smooth, threshold, 255, 0) 
-    cv.imwrite('thresh.png',thresh)
+    if False:
+        cv.imwrite('thresh.png',thresh)
     contours, _ = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     
     print(f"got this many contours: {len(contours)}")
@@ -145,36 +174,25 @@ def highlight_energy(samples, samp_rate, fft_size, window_size, noise_power, pwr
         an["core:description"] = "Unknown"
         annotations.append(an)
 
-    cv.imwrite('thresh_cont.png', backtorgb)
+    if False:
+        cv.imwrite('thresh_cont.png', backtorgb)
     return annotations
-
-def process_annotiations(metahandle, samples, anots, samp_rate, center_freq):
-    rects = []
-    for a in anots:
-        metahandle.add_annotation(a['core:sample_start'], a['core:sample_count'], a)
-        td = {'start_samp':a['core:sample_start'],'end_samp':a['core:sample_start']+a['core:sample_count'],'start_freq':a['core:freq_lower_edge']-center_freq,'end_freq': a['core:freq_upper_edge']-center_freq, 'min_pwr':123}
-        rects.append(td)
-    metahandle.tofile('newmeta')
-    spectrogram(samples, samp_rate, rects)
 
 
 if __name__ == "__main__":
-    
-    call_params = {'fname':'synthetic_int16', 'time_window_size':10, 'power_threshold_db': 20, 'time_margin_seconds': 0.001, 'min_bw':10e3}
-    
-    handle = sigmf.sigmffile.fromfile(call_params['fname'])
-    sample_rate = handle.get_global_field(sigmf.SigMFFile.SAMPLE_RATE_KEY)
-    cap = handle.get_captures()[0]
-    center_freq = handle.get_captures()[0]['core:frequency']
-    start_time = handle.get_captures()[0]["core:sample_start"]
-    samps = handle.read_samples()
+    fname = "C:\\Users\\marclichtman\\Downloads\\synthetic"
+    with open(fname + '.sigmf-meta', 'r') as f:
+        meta_data = json.load(f)
+    sample_rate = meta_data["global"]["core:sample_rate"]
+    center_freq = meta_data["captures"][0]['core:frequency']
+    samps = np.fromfile(fname + '.sigmf-data', dtype=np.complex64)
 
-    noise_params = get_noise_floor(samps, sample_rate, n_floor_window_bins=call_params['time_window_size'])
-    start = time.time()
-    anots = highlight_energy(samples=samps, samp_rate=sample_rate, fft_size=1024, window_size=call_params['time_window_size'], noise_power=noise_params['min_pwr'],
-                             pwr_thresh_db=call_params['power_threshold_db'], time_margin=call_params['time_margin_seconds'], center_freq=center_freq,
-                             min_bw=call_params['min_bw'])
-    end = time.time()
-    print(f"that took {end - start} seconds")
-    print(len(anots))
-    process_annotiations(handle, samps, anots, sample_rate, center_freq)
+    detector_settings = {'time_window_size': 10, 'power_threshold_db': 20, 'time_margin_seconds': 0.001, 'min_bw': 10e3}
+
+    function_input = {"samples": samps,
+                      "sample_rate": sample_rate,
+                      "center_freq": center_freq,
+                      "detector_settings": detector_settings}
+
+    annotations = detect(function_input)
+    print(annotations)
