@@ -6,6 +6,8 @@
 or on Windows:
 `python -m uvicorn main:app --reload`
 
+If you have VSCode's REST Client extension you can try running the example_call.http by clicking the "send request" link that will pop up at the top
+
 ## Write your own detection function
 
 ### Function Input:
