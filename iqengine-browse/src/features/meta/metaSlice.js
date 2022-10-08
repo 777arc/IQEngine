@@ -8,10 +8,6 @@ const initialState = {annotations: [],
                       captures: [],
                       global: {}};
 
-export const selectMetaAnnotations = state => state.meta.annotations;
-export const selectMetaCaptures = state => state.meta.captures;
-export const selectMetaGlobal = state => state.meta.global;
-
 export default function metaReducer(state = initialState, action) {
     switch (action.type) {
     case 'meta/dataLoaded': {

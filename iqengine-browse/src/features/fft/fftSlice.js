@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import { createSlice } from '@reduxjs/toolkit'
-export const selectFftSize = state => state.fft.size;
-export const selectMagnitudeDivider = state => state.fft.magnitudeDivider;
 
 export const fftSlice = createSlice({
   name: 'fft',
