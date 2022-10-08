@@ -18,7 +18,7 @@ export const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,
     let sasToken = state.connection.sasToken;
 
     let blobName = useParams().recording + '.sigmf-data'; // so we know which recording was clicked on
-    console.log(blobName);
+    console.log('xxx', blobName);
 
     // Get the blob client TODO: REFACTOR SO WE DONT HAVE TO REMAKE THE CLIENT EVERY TIME!
     const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
@@ -27,10 +27,18 @@ export const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,
 
     try {
         var startTime = performance.now()
-        const state = getState();
         let num_samples = 2000;
         let offset = state.blob.size;
-        const bytes_per_sample = 2; // for int16s
+
+        let bytes_per_sample = 2;
+        if (window.data_type === 'ci16_le') {
+            bytes_per_sample = 2;
+        } else if (window.data_type === 'cf32_le') {
+            bytes_per_sample = 4;
+        } else {
+            bytes_per_sample = 2;
+        }
+
         let count = 1024*num_samples*bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else. 
         /*let blobProps = await blobClient.getProperties();
         let content_length = parseInt(blobProps["contentLength"]);
