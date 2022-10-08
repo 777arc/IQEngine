@@ -1,27 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react'
-
 export default async function getFilesFromBlob(accountName, containerName, sasToken)
 {
     const { BlobServiceClient } = require("@azure/storage-blob");
 
-    const entries = [];
-
     const baseUrl = `https://${accountName}.blob.core.windows.net/${containerName}/`;
-
     const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
-
     const containerClient = blobServiceClient.getContainerClient(containerName);
 
-    // console.log("\nListing blobs...");
     // List the blob(s) in the container.
+    const entries = [];
     for await (const blob of containerClient.listBlobsFlat()) {
-      // Get Blob Client from name, to get the URL
-      const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name);
-      // Display blob name and URL
-    //   console.log(`${blob.name}\n`);
 
       // only process meta-data files
       if(blob.name.split('.').pop() === 'sigmf-meta')

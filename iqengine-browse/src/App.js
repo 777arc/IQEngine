@@ -3,7 +3,6 @@
 
 import './App.css';
 import React , { Component } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
@@ -18,7 +17,6 @@ import {
   Routes,
   Route,
   Link,
-  useParams
 } from "react-router-dom";
 
 class App extends Component {

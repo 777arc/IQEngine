@@ -15,7 +15,7 @@ export const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,
     let containerName = state.connection.containerName;
     let sasToken = state.connection.sasToken;
 
-    while (state.connection.recording == "")
+    while (state.connection.recording === "")
     {
         console.log("waiting"); // hopefully this doesn't happen, and if it does it should be pretty quick because its the time it takes for the state to set
     }
