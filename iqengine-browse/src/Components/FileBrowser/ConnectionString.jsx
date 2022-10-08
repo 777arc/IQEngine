@@ -7,8 +7,6 @@ import { useDispatch } from 'react-redux'
 import { updateAccountName, updateContainerName, updateSasToken } from '../../features/connection/connectionSlice'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
 
 function ConnectionStringInput (props) {
     const dispatch = useDispatch()
@@ -43,8 +41,8 @@ function ConnectionStringInput (props) {
             <Form.Control type="text"  value={sasToken} onChange={onSasTokenChange} size="sm"  />
           </Form.Group>
 
-          <Button className="btn btn-secondary" onClick={onSubmit}>
-            <FontAwesomeIcon icon={faArrowRight} />
+          <Button className="btn btn-success" onClick={onSubmit}>
+            Browse Recordings
           </Button>
 
         </div>

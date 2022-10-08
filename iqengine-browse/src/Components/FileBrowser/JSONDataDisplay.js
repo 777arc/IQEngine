@@ -23,6 +23,12 @@ import Directory from './Directory';
         }
     )
 
+    // Hide menu if the data hasnt loaded yet
+    if (dataTree.length === 0)
+    {
+        return(<></>)
+    }
+
     return(
         <div className="container-fluid">
             <table className="table">
