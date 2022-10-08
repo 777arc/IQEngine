@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from "react-router-dom";
 
 const { BlobServiceClient } = require("@azure/storage-blob");
 
@@ -17,8 +15,11 @@ export const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,
     let containerName = state.connection.containerName;
     let sasToken = state.connection.sasToken;
 
-    let blobName = useParams().recording + '.sigmf-data'; // so we know which recording was clicked on
-    console.log('xxx', blobName);
+    while (state.connection.recording == "")
+    {
+        console.log("waiting"); // hopefully this doesn't happen, and if it does it should be pretty quick because its the time it takes for the state to set
+    }
+    let blobName = state.connection.recording + '.sigmf-data';
 
     // Get the blob client TODO: REFACTOR SO WE DONT HAVE TO REMAKE THE CLIENT EVERY TIME!
     const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
