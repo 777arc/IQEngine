@@ -6,7 +6,7 @@ import React , { Component } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
-import SpectrogramPage from './Components/FileBrowser/SpectrogramPage';
+import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 
 import './Components/Spectrogram/sidebar.css';
 
