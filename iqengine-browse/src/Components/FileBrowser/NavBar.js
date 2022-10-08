@@ -9,7 +9,8 @@ function NavBar() {
             <div class="col-sm">
             <h1 className="display-1">IQEngine</h1>
             </div>
-            <div class="col-lg bs-component navbar-dark bg-primary">
+            <div class="col-lg bs-component">
+              
               <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div class="container-fluid">
                   <Link to="#" class="navbar-brand">Navbar</Link>
@@ -45,6 +46,8 @@ function NavBar() {
                   </div>
                 </div>
               </nav>
+              
+
             </div>
 
             </div>
