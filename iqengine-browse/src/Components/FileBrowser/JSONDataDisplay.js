@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, {useState} from 'react'
-import '../../App.css'
+import React from 'react'
 // import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import GroupByFolder from '../../GroupByFolder';
 import Directory from './Directory';

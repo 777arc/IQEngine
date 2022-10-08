@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import './App.css';
 import React , { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
