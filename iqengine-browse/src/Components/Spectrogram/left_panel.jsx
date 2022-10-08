@@ -1,13 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState} from "react";
+import React from "react";
 
 import SettingsPane from "./settings_pane";
 import InfoPane from "./info_pane";
 import Accordion from 'react-bootstrap/Accordion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function LeftPanel() {

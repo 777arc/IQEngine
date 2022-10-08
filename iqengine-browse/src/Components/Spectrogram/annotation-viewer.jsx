@@ -46,10 +46,11 @@ const AnnotationViewer = (props) => {
         for (let i = 0; i < ticks; i++) {
             context.beginPath();
             context.lineWidth = "1";
-            context.strokeStyle = "black";
+            context.strokeStyle = "white";
             context.moveTo(spectrogram_width + 5 , upper_tick_height + i*10);
             if (i % 10 === 0) { 
                 context.lineTo(spectrogram_width + timescale_width, upper_tick_height + i*10);
+                context.fillStyle = "#FFFFFF"; // font color
                 context.fillText((i*time_per_row*10*1e3).toString(), spectrogram_width + 22, upper_tick_height + i*10 + (font_height/2)); // in ms
             } else {
                 context.lineTo(spectrogram_width + timescale_width - 10 , i*10 + upper_tick_height);

@@ -18,11 +18,11 @@ function SpectrogramPage() {
     return (
         <div>
           <Container fluid>
-            <Row>
-              <Col xs={2} id="sidebar-wrapper">      
+            <Row className="flex-nowrap">
+              <Col className="col-3">      
                 <Sidebar />
               </Col>
-              <Col  xs={10} id="page-content-wrapper">
+              <Col>
                 <SpectrogramPanel/>
               </Col> 
             </Row>

@@ -22,22 +22,18 @@ const RulerTop = (props) => {
         // Draw the spectrogram
         context.beginPath();
         context.rect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "white";
-        context.fill();
         // Draw the horizontal scales
         var ticks_hor = select_fft_return.image_data.width / 8;
         context.font = '16px serif';
-        context.fillStyle = 'black';
+        context.fillStyle = 'white';
         const font_height = context.measureText("100").actualBoundingBoxAscent;
         let hz_per_column = select_fft_return.sample_rate / select_fft_return.fft_size * 2; // not sure why i needed the *2
         for (let i = 0; i <= ticks_hor; i++) {
             context.beginPath();
             context.lineWidth = "1";
-            context.strokeStyle = "black";
-            if (i % 8 === 0) { 
- 
+            context.strokeStyle = "white";
+            if (i % 8 === 0) {
                 const txt = ((i*hz_per_column*8 + select_fft_return.sample_rate/-2)/1e6).toString();
-                
                 const txt_width = context.measureText(txt).width;
                 context.fillText(txt, i*8*spectrogram_width_scale-(txt_width/2), font_height); // in ms
                 context.moveTo(i*8*spectrogram_width_scale, font_height + 2);

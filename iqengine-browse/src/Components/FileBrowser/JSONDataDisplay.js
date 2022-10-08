@@ -24,7 +24,7 @@ import Directory from './Directory';
     )
 
     return(
-        <div>
+        <div className="container-fluid">
             <table className="table">
                 <thead>
                     <tr>

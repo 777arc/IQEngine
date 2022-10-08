@@ -29,7 +29,7 @@ function ConnectionStringInput (props) {
     }
 
     return (
-      <div id='ConnectionStringContainer'>
+      <div id='ConnectionStringContainer' className="container-fluid">
         <div className="form-group">
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
