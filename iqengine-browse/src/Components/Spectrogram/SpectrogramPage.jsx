@@ -1,6 +1,6 @@
 import { SpectrogramPanel } from './spectrogram-panel';
 import {Container, Row, Col } from "react-bootstrap";
-import { FetchMoreData } from '../../features/blob/blobSlice'
+import FetchMoreData from '../../features/blob/fetchMoreData'
 import { FetchMeta } from '../../features/meta/metaSlice'
 import { useDispatch } from 'react-redux'
 import Sidebar from "./sidebar";

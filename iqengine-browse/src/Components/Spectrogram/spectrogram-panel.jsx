@@ -6,7 +6,7 @@ import {AnnotationViewer} from "./annotation-viewer"
 import {RulerTop} from "./ruler-top"
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { FetchMoreData } from "../../features/blob/blobSlice"
+import FetchMoreData from "../../features/blob/fetchMoreData"
 
 const SpectrogramPanel = () => {
 

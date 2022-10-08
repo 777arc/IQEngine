@@ -33,7 +33,7 @@ export async function FetchMeta(dispatch, getState) {
     let blobName = useParams().recording + '.sigmf-meta'; // so we know which recording was clicked on
     console.log(blobName);
     
-    if (containerName == "") {
+    if (containerName === "") {
         console.error("container name was not filled out for some reason");
     }
 
