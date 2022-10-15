@@ -27,7 +27,7 @@ const RulerTop = (props) => {
         context.font = '16px serif';
         context.fillStyle = 'white';
         const font_height = context.measureText("100").actualBoundingBoxAscent;
-        let hz_per_column = select_fft_return.sample_rate / select_fft_return.fft_size * 2; // not sure why i needed the *2
+        let hz_per_column = select_fft_return.sample_rate / select_fft_return.fft_size;
         for (let i = 0; i <= ticks_hor; i++) {
             context.beginPath();
             context.lineWidth = "1";

@@ -93,9 +93,9 @@ export const select_fft = (state) => {
     window.fft_size = fft_size;
     var magnitude_max = state.fft.magnitudeMax;
     var magnitude_min = state.fft.magnitudeMin;
-    const num_ffts = Math.floor(window.iq_data.length/fft_size);      
+    const num_ffts = Math.floor(window.iq_data.length/fft_size/2);  // divide by 2 because this is number of ints/floats not IQ samples    
     var startTime = performance.now()
-    const pxPerLine = fft_size/2;
+    const pxPerLine = fft_size;
     const lines = num_ffts;
     const w = pxPerLine;
     const h = lines;
@@ -134,14 +134,14 @@ export const select_fft = (state) => {
     if ((fft_size === previous_fft_size) && 
         (magnitude_min === previous_magnitude_min) &&
         (magnitude_max === previous_magnitude_max)) {
-        starting_row = Math.floor(previous_blob_size/fft_size);  
+        starting_row = Math.floor(previous_blob_size/fft_size/2);  
         new_fft_data.set(window.fft_data, 0);
     } 
 
       for (var i = starting_row; i < num_ffts; i++){
   
-          const x = window.iq_data.slice(i*fft_size, (i+1)*fft_size)
-          const f = new FFT(x.length/2); // you tell it fft size, not the input array size, which will be twice the fft size
+          const x = window.iq_data.slice(i*fft_size*2, (i+1)*fft_size*2) // mult by 2 because this is int/floats not IQ samples
+          const f = new FFT(fft_size);
           const out = f.createComplexArray(); // creates an empty array the length of fft.size*2
           f.transform(out, x); // assumes input (2nc arg) is in form IQIQIQIQ and twice the length of fft.size
           var magnitudes = new Array(out.length/2);
@@ -209,14 +209,14 @@ export const select_fft = (state) => {
         //console.log("center_frequency:", center_frequency, "sample_rate:", sample_rate)
         let lower_freq = center_frequency - sample_rate/2;
         let upper_freq = center_frequency + sample_rate/2;
-        let delta_f = (sample_rate/fft_size)*2; // hz per bin
+        let delta_f = sample_rate/fft_size; // hz per bin
         //console.log("lower_freq:", lower_freq, "upper_freq:", upper_freq, "delta_f:", delta_f);
 
         if ((sample_start >= start_sample_index) && (sample_start < stop_sample_index)) {
           annotations_list.push({"x": (freq_lower_edge - lower_freq)/delta_f, // number of freq bins
-                                 "y": sample_start/fft_size, // fft index
+                                 "y": sample_start/fft_size/2, // fft index, divide by 2 is because sample start is in int/floats not IQ samples
                                  "width": (freq_upper_edge - freq_lower_edge)/delta_f, // number of freq bins
-                                 "height": sample_count/fft_size, // fft index
+                                 "height": sample_count/fft_size/2, // fft index
                                  "description": description
                                  }); 
         }
