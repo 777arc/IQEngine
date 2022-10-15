@@ -5,6 +5,7 @@ import React, { useState} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateSize, updateMagnitudeMax, updateMagnitudeMin } from '../../features/fft/fftSlice'
+import { updateTaps } from '../../features/blob/blobSlice'
 import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -26,6 +27,27 @@ export default function SettingsPane() {
   const [fftsize, setFftsize] = useState(useSelector((state) => state.fft.size));
   const onChangeFftsize = (event) => {setFftsize(event.target.value);};
   const onSubmitFftsize = () => {dispatch(updateSize(fftsize))}
+
+
+  const [taps_string, setTaps] = useState(useSelector((state) => '['+state.blob.taps.toString()+']'));
+  const onChangeTaps = (event) => {setTaps(event.target.value)}; // only updates the displayed string
+  const onSubmitTaps = () => {
+    let taps = new Array(1).fill(1);
+    // make sure the string is a valid array
+    if ((taps_string[0] === '[') && (taps_string.slice(-1) === ']'))
+    {
+      taps = taps_string.slice(1,-1).split(",");
+      taps = taps.map(x => parseFloat(x));
+      taps = Float32Array.from(taps);
+      dispatch(updateTaps(taps));
+      console.log("valid taps, found", taps.length, "taps");
+    }
+    else
+    {
+      console.error("invalid taps");
+    }
+    dispatch(updateTaps(taps))
+  }
 
   return (
     <Form>
@@ -54,6 +76,16 @@ export default function SettingsPane() {
         <InputGroup className="mb-3">
         <Form.Control type="text"  value={fftsize} onChange={onChangeFftsize} size="sm"  />
         <Button className="btn btn-secondary" onClick={onSubmitFftsize}>
+              <FontAwesomeIcon icon={faArrowRight} />
+        </Button>
+      </InputGroup>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>FIR Filter Taps</Form.Label>
+        <InputGroup className="mb-3">
+        <Form.Control type="text"  value={taps_string} onChange={onChangeTaps} size="sm"  />
+        <Button className="btn btn-secondary" onClick={onSubmitTaps}>
               <FontAwesomeIcon icon={faArrowRight} />
         </Button>
       </InputGroup>

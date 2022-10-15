@@ -4,14 +4,19 @@
 import { createSlice} from "@reduxjs/toolkit";
 import FetchMoreData from "./fetchMoreData";
 
-const initialState = {size: 0, status: "idle", scrollOffset: 0};
 window.iq_data = [];   // This is GROSS!!! but it works?! I need a global way to store large binary variables.
 
 const blobSlice = createSlice({
     name: "blob",
-    initialState,
+    initialState: {
+        size: 0,
+        status: "idle",
+        scrollOffset: 0,
+        taps: new Float32Array(1).fill(1),
+    },
     reducers: {
-        setScrollOffset: (state,action) => { state.scrollOffset = action.payload; }
+        setScrollOffset: (state,action) => { state.scrollOffset = action.payload; },
+        updateTaps: (state,action) => {state.taps = action.payload},
     },
     extraReducers: (builder) => {
         builder.addCase(FetchMoreData.pending, (state, action) => {
@@ -40,5 +45,8 @@ const blobSlice = createSlice({
         })
     }
 });
+
+// Action creators are generated for each case reducer function
+export const { updateTaps } = blobSlice.actions
 
 export default blobSlice.reducer;
