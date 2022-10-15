@@ -78,7 +78,8 @@ if the blob size changes, you only need to add on the new stuff. I think the sol
 
 var previous_blob_size = 0;
 var previous_fft_size = 0;
-var previous_magnitude_divider = 0;
+var previous_magnitude_max = 0;
+var previous_magnitude_min = 0;
 window.fft_data = new Uint8ClampedArray();
 window.annotations = []; // gets filled in before return
 window.sample_rate = 1; // will get filled in
@@ -90,7 +91,8 @@ export const select_fft = (state) => {
     var blob_size = state.blob.size; // this is actually the number of int16's that have been downloaded so far
     var fft_size = state.fft.size;
     window.fft_size = fft_size;
-    var magnitude_divider = state.fft.magnitudeDivider;
+    var magnitude_max = state.fft.magnitudeMax;
+    var magnitude_min = state.fft.magnitudeMin;
     const num_ffts = Math.floor(window.iq_data.length/fft_size);      
     var startTime = performance.now()
     const pxPerLine = fft_size/2;
@@ -99,7 +101,10 @@ export const select_fft = (state) => {
     const h = lines;
 
     // has there been any changes since we last rendered the FFT?  if not just return the existing fft_data
-    if (!((blob_size !== previous_blob_size) || (fft_size !== previous_fft_size) || (magnitude_divider !== previous_magnitude_divider))) {
+    if (!((blob_size !== previous_blob_size) ||
+          (fft_size !== previous_fft_size) ||
+          (magnitude_min !== previous_magnitude_min) ||
+          (magnitude_max !== previous_magnitude_max))) {
         let select_fft_return = {image_data: new ImageData(window.fft_data, w, h),
                                  annotations: window.annotations,
                                  sample_rate: window.sample_rate,
@@ -126,7 +131,9 @@ export const select_fft = (state) => {
       new_fft_data[i+3] = colMap[0][3]; // alpha
     }
     // initialize the direction and first line position
-    if ((fft_size === previous_fft_size) && (magnitude_divider === previous_magnitude_divider)) {
+    if ((fft_size === previous_fft_size) && 
+        (magnitude_min === previous_magnitude_min) &&
+        (magnitude_max === previous_magnitude_max)) {
         starting_row = Math.floor(previous_blob_size/fft_size);  
         new_fft_data.set(window.fft_data, 0);
     } 
@@ -145,11 +152,18 @@ export const select_fft = (state) => {
   
           // convert to dB
           magnitudes = magnitudes.map(x => 10.0*Math.log10(x));
+
+          // convert to 0 - 255
           let minimum_val = Math.min(...magnitudes); // the ... tell it that its an array I guess
           magnitudes = magnitudes.map(x => x - minimum_val); // lowest value is now 0
           let maximum_val = Math.max(...magnitudes); 
           magnitudes = magnitudes.map(x => x / maximum_val); // highest value is now 1
-          magnitudes = magnitudes.map(x => x * magnitude_divider); // range is now 0 to magnitudeDivider which should be up to 255
+          magnitudes = magnitudes.map(x => x * 255); // now from 0 to 255
+
+          // apply magnitude min and max
+          magnitudes = magnitudes.map(x => x / ((magnitude_max - magnitude_min)/255));
+          magnitudes = magnitudes.map(x => x - magnitude_min)
+          
           
           //const magnitude = ((magnitudeDivider || 10000) < 0 ? 10000 : (magnitudeDivider || 10000));
           //magnitudes = magnitudes.map(x => x / magnitude);  
@@ -211,7 +225,8 @@ export const select_fft = (state) => {
 
       previous_blob_size = blob_size;
       previous_fft_size = fft_size;
-      previous_magnitude_divider = magnitude_divider;
+      previous_magnitude_max = magnitude_max;
+      previous_magnitude_min = magnitude_min;
       window.fft_data = new_fft_data;   
 
       let select_fft_return = {image_data: new ImageData(window.fft_data, w, h),
