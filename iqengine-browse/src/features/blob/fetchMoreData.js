@@ -3,6 +3,31 @@
 
 import { createAsyncThunk} from "@reduxjs/toolkit";
 
+function convolve(array, taps) {
+    console.log(taps);
+    
+    // make sure its an odd number of taps
+    if (taps.length % 2 !== 1)
+      taps.push(0);
+
+    let I = array.filter((element, index) => {return index % 2 === 0;});
+    let Q = array.filter((element, index) => {return index % 2 === 1;});
+
+    var offset = ~~(taps.length / 2);
+    var output = new Float32Array(array.length);
+    for (var i = 0; i < array.length/2; i++) {
+      var kmin = (i >= offset) ? 0 : offset - i;
+      var kmax = (i + offset < array.length/2) ? taps.length - 1 : array.length/2 - 1 - i + offset;
+      output[i*2] = 0; // I
+      output[i*2+1] = 0; // Q
+      for (var k = kmin; k <= kmax; k++) {
+        output[i*2] += I[i - offset + k] * taps[k]; // I
+        output[i*2+1] += Q[i - offset + k] * taps[k]; // Q
+      }
+    }
+    return output;
+  }
+
 const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,{ getState}) => {
     console.log("running FetchMoreData")
     let state = getState();
@@ -37,27 +62,24 @@ const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,{ getSt
         }
 
         let count = 1024*num_samples*bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else. 
-        /*let blobProps = await blobClient.getProperties();
-        let content_length = parseInt(blobProps["contentLength"]);
-        console.log("Blob length: " + content_length + " Requesting a total of: " + parseInt(offset + count));
-        if ((offset + count) > content_length) {
-            console.log("Requesting more than is in the file!");
-        }*/
         const downloadBlockBlobResponse = await blobClient.download(offset, count);
         const blob = await downloadBlockBlobResponse.blobBody;
         const buffer = await blob.arrayBuffer();
         var endTime = performance.now()
         console.log("Fetching more data took", endTime - startTime, "milliseconds");
+        let samples;
         if (window.data_type === 'ci16_le') {
-            return new Int16Array(buffer);
+            samples = new Int16Array(buffer);
+            samples = convolve(samples, state.blob.taps)
+            samples = Int16Array.from(samples); // convert back to int TODO: clean this up
         } else if (window.data_type === 'cf32_le') {
-            return new Float32Array(buffer);
+            samples = new Float32Array(buffer);
+            samples = convolve(samples, state.blob.taps)
         } else {
             console.error("unsupported data_type");
-            return new Int16Array(buffer);
+            samples = new Int16Array(buffer);
         }
-            //const signal = new Int16Array(buffer);
-            //dispatch({ type: 'blob/dataLoaded', payload: signal });    
+        return samples;
     } catch (error) {
         console.error(error);
         // expected output: ReferenceError: nonExistentFunction is not defined
