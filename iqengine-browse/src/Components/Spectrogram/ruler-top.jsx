@@ -23,24 +23,24 @@ const RulerTop = (props) => {
         context.beginPath();
         context.rect(0, 0, canvas.width, canvas.height);
         // Draw the horizontal scales
-        var ticks_hor = select_fft_return.image_data.width / 8;
+        console.log("spectrogram_width_scale:", spectrogram_width_scale)
+        const num_ticks = 16;
         context.font = '16px serif';
         context.fillStyle = 'white';
         const font_height = context.measureText("100").actualBoundingBoxAscent;
-        let hz_per_column = select_fft_return.sample_rate / select_fft_return.fft_size;
-        for (let i = 0; i <= ticks_hor; i++) {
+        for (let i = 0; i <= num_ticks; i++) {
             context.beginPath();
             context.lineWidth = "1";
             context.strokeStyle = "white";
-            if (i % 8 === 0) {
-                const txt = ((i*hz_per_column*8 + select_fft_return.sample_rate/-2)/1e6).toString();
+            if (i % (num_ticks/4) === 0) {
+                const txt = ((i / num_ticks * select_fft_return.sample_rate - select_fft_return.sample_rate/2) / 1e6).toString();
                 const txt_width = context.measureText(txt).width;
-                context.fillText(txt, i*8*spectrogram_width_scale-(txt_width/2), font_height); // in ms
-                context.moveTo(i*8*spectrogram_width_scale, font_height + 2);
-                context.lineTo(i*8*spectrogram_width_scale, upper_tick_height-2);
+                context.fillText(txt, select_fft_return.fft_size/num_ticks*i*spectrogram_width_scale-(txt_width/2), font_height); // in ms
+                context.moveTo(select_fft_return.fft_size/num_ticks*i*spectrogram_width_scale, font_height + 2);
+                context.lineTo(select_fft_return.fft_size/num_ticks*i*spectrogram_width_scale, upper_tick_height-2);
             } else {
-                context.moveTo(i*8*spectrogram_width_scale, font_height + 10);
-                context.lineTo(i*8*spectrogram_width_scale, upper_tick_height-2);
+                context.moveTo(select_fft_return.fft_size/num_ticks*i*spectrogram_width_scale, font_height + 10);
+                context.lineTo(select_fft_return.fft_size/num_ticks*i*spectrogram_width_scale, upper_tick_height-2);
             }
 
             context.stroke();

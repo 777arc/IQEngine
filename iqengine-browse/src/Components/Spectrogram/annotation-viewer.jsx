@@ -11,9 +11,11 @@ const AnnotationViewer = (props) => {
     const canvasAnnotationRef = useRef(null)
     const canvas = canvasAnnotationRef.current
     if (canvas && select_fft_return) {
+        console.log("Generating annotations", select_fft_return.fft_size)
         const context = canvas.getContext('2d')
  
         const spectrogram_width_scale  =  select_fft_return.image_data ? props.spectrogram_width/select_fft_return.image_data.width : 1;
+        console.log("spectrogram_width_scale:", spectrogram_width_scale)
         const spectrogram_width = Math.floor(select_fft_return.image_data.width * spectrogram_width_scale);
         const timescale_width = props.timescale_width;
         const text_width = props.text_width;
@@ -30,10 +32,15 @@ const AnnotationViewer = (props) => {
             context.lineWidth = "4";
             context.strokeStyle = "black";
             //context.rect(select_fft_return.annotations[i].x , select_fft_return.annotations[i].y, select_fft_return.annotations[i].width, select_fft_return.annotations[i].height);
-            context.rect(select_fft_return.annotations[i].x * spectrogram_width_scale, select_fft_return.annotations[i].y*2+upper_tick_height, select_fft_return.annotations[i].width * spectrogram_width_scale, select_fft_return.annotations[i].height*2);
+            context.rect(select_fft_return.annotations[i].x * spectrogram_width_scale * select_fft_return.fft_size,
+                         select_fft_return.annotations[i].y*2/select_fft_return.fft_size + upper_tick_height,
+                         select_fft_return.annotations[i].width * spectrogram_width_scale * select_fft_return.fft_size,
+                         select_fft_return.annotations[i].height*2/select_fft_return.fft_size);
             // add the label
             context.font = 'bold 28px serif';
-            context.fillText(select_fft_return.annotations[i].description, select_fft_return.annotations[i].x * spectrogram_width_scale, select_fft_return.annotations[i].y*2+upper_tick_height - 5);
+            context.fillText(select_fft_return.annotations[i].description,
+                             select_fft_return.annotations[i].x * spectrogram_width_scale * select_fft_return.fft_size,
+                             select_fft_return.annotations[i].y*2/select_fft_return.fft_size + upper_tick_height - 5);
             context.stroke();
         }
                 

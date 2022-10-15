@@ -206,17 +206,13 @@ export const select_fft = (state) => {
         let center_frequency = state.meta.captures[0]['core:frequency'];
         let sample_rate = state.meta.global['core:sample_rate'];
         window.sample_rate = sample_rate;
-        //console.log("center_frequency:", center_frequency, "sample_rate:", sample_rate)
         let lower_freq = center_frequency - sample_rate/2;
-        let upper_freq = center_frequency + sample_rate/2;
-        let delta_f = sample_rate/fft_size; // hz per bin
-        //console.log("lower_freq:", lower_freq, "upper_freq:", upper_freq, "delta_f:", delta_f);
 
         if ((sample_start >= start_sample_index) && (sample_start < stop_sample_index)) {
-          annotations_list.push({"x": (freq_lower_edge - lower_freq)/delta_f, // number of freq bins
-                                 "y": sample_start/fft_size/2, // fft index, divide by 2 is because sample start is in int/floats not IQ samples
-                                 "width": (freq_upper_edge - freq_lower_edge)/delta_f, // number of freq bins
-                                 "height": sample_count/fft_size/2, // fft index
+          annotations_list.push({"x": (freq_lower_edge - lower_freq)/sample_rate,
+                                 "y": sample_start/2, // divide by 2 is because sample start is in int/floats not IQ samples
+                                 "width": (freq_upper_edge - freq_lower_edge)/sample_rate,
+                                 "height": sample_count/2,
                                  "description": description
                                  }); 
         }

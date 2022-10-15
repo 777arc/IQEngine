@@ -4,7 +4,7 @@
 import React, { useState} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateMagnitudeMax, updateMagnitudeMin } from '../../features/fft/fftSlice'
+import { updateSize, updateMagnitudeMax, updateMagnitudeMin } from '../../features/fft/fftSlice'
 import { faArrowRight} from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -23,6 +23,10 @@ export default function SettingsPane() {
   const onChangeMagnitudeMin = (event) => {setValueMagnitudeMin(event.target.value);};
   const onSubmitMagnitudeMin = () => {dispatch(updateMagnitudeMin(magnitudeMin))}
 
+  const [fftsize, setFftsize] = useState(useSelector((state) => state.fft.size));
+  const onChangeFftsize = (event) => {setFftsize(event.target.value);};
+  const onSubmitFftsize = () => {dispatch(updateSize(fftsize))}
+
   return (
     <Form>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -40,6 +44,16 @@ export default function SettingsPane() {
         <InputGroup className="mb-3">
         <Form.Control type="text"  value={magnitudeMin} onChange={onChangeMagnitudeMin} size="sm"  />
         <Button className="btn btn-secondary" onClick={onSubmitMagnitudeMin}>
+              <FontAwesomeIcon icon={faArrowRight} />
+        </Button>
+      </InputGroup>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>FFT Size</Form.Label>
+        <InputGroup className="mb-3">
+        <Form.Control type="text"  value={fftsize} onChange={onChangeFftsize} size="sm"  />
+        <Button className="btn btn-secondary" onClick={onSubmitFftsize}>
               <FontAwesomeIcon icon={faArrowRight} />
         </Button>
       </InputGroup>
