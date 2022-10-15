@@ -15,7 +15,6 @@ const AnnotationViewer = (props) => {
         const context = canvas.getContext('2d')
  
         const spectrogram_width_scale  =  select_fft_return.image_data ? props.spectrogram_width/select_fft_return.image_data.width : 1;
-        console.log("spectrogram_width_scale:", spectrogram_width_scale)
         const spectrogram_width = Math.floor(select_fft_return.image_data.width * spectrogram_width_scale);
         const timescale_width = props.timescale_width;
         const text_width = props.text_width;

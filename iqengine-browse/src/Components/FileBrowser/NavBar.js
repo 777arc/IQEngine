@@ -4,44 +4,44 @@ function NavBar() {
 
     return (
       <>
-        <div class="container">
-          <div class="row">
-            <div class="col-sm">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm">
             <h1 className="display-1">IQEngine</h1>
             </div>
-            <div class="col-lg bs-component">
+            <div className="col-lg bs-component">
               
-              <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div class="container-fluid">
-                  <Link to="#" class="navbar-brand">Navbar</Link>
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+              <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div className="container-fluid">
+                  <Link to="#" className="navbar-brand">Navbar</Link>
+                  <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
                   </button>
 
-                  <div class="collapse navbar-collapse" id="navbarColor03">
-                    <ul class="navbar-nav me-auto">
-                      <li class="nav-item">
-                        <Link to="#" class="nav-link active">Home
-                          <span class="visually-hidden">(current)</span>
+                  <div className="collapse navbar-collapse" id="navbarColor03">
+                    <ul className="navbar-nav me-auto">
+                      <li className="nav-item">
+                        <Link to="#" className="nav-link active">Home
+                          <span className="visually-hidden">(current)</span>
                         </Link>
                       </li>
-                      <li class="nav-item">
-                        <Link to="#" class="nav-link">Features</Link>
+                      <li className="nav-item">
+                        <Link to="#" className="nav-link">Features</Link>
                       </li>
-                      <li class="nav-item dropdown">
-                        <Link class="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</Link>
-                        <div class="dropdown-menu">
-                          <Link class="dropdown-item" to="#">Action</Link>
-                          <Link class="dropdown-item" to="#">Another action</Link>
-                          <Link class="dropdown-item" to="#">Something else here</Link>
-                          <div class="dropdown-divider"></div>
-                          <Link class="dropdown-item" to="#">Separated link</Link>
+                      <li className="nav-item dropdown">
+                        <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</Link>
+                        <div className="dropdown-menu">
+                          <Link className="dropdown-item" to="#">Action</Link>
+                          <Link className="dropdown-item" to="#">Another action</Link>
+                          <Link className="dropdown-item" to="#">Something else here</Link>
+                          <div className="dropdown-divider"></div>
+                          <Link className="dropdown-item" to="#">Separated link</Link>
                         </div>
                       </li>
                     </ul>
-                    <form class="d-flex">
-                      <input class="form-control me-sm-2" type="text" placeholder="Search"></input>
-                      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    <form className="d-flex">
+                      <input className="form-control me-sm-2" type="text" placeholder="Search"></input>
+                      <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                     </form>
                   </div>
                 </div>

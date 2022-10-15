@@ -23,7 +23,6 @@ const RulerTop = (props) => {
         context.beginPath();
         context.rect(0, 0, canvas.width, canvas.height);
         // Draw the horizontal scales
-        console.log("spectrogram_width_scale:", spectrogram_width_scale)
         const num_ticks = 16;
         context.font = '16px serif';
         context.fillStyle = 'white';
