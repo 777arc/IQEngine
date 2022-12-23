@@ -1,56 +1,48 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react'
+import React from 'react';
 // import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import GroupByFolder from '../../GroupByFolder';
 import Directory from './Directory';
 
- function JsonDataDisplay({data}){
-    const gfiles = data.map(data => data.name);
-    let dataTree = [];
+function JsonDataDisplay({ data }) {
+  const gfiles = data.map((data) => data.name);
+  let dataTree = [];
 
-    if (gfiles.length > 0){
-        dataTree = GroupByFolder(data, '');
-    }
+  if (gfiles.length > 0) {
+    dataTree = GroupByFolder(data, '');
+  }
 
-    console.log(dataTree);
-    const DisplayData=dataTree.map(
-        (info,i)=>{
-            return(
-                <Directory key={i} files={info} />
-            )
-        }
-    )
+  console.log(dataTree);
+  const DisplayData = dataTree.map((info, i) => {
+    return <Directory key={i} files={info} />;
+  });
 
-    // Hide menu if the data hasnt loaded yet
-    if (dataTree.length === 0)
-    {
-        return(<></>)
-    }
+  // Hide menu if the data hasnt loaded yet
+  if (dataTree.length === 0) {
+    return <></>;
+  }
 
-    return(
-        <div className="container-fluid">
-            <table className="table">
-                <thead>
-                    <tr>
-                    <th>Spectrogram</th>
-                    <th>Recording Name</th>
-                    <th>Data Type</th>
-                    <th>Freq [MHz]</th>
-                    <th>Sample Rate [MHz]</th>
-                    <th># of Annotations</th>
-                    <th>Author</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {DisplayData}
-                </tbody>
-            </table>
-
-        </div>
-    )
- }
+  return (
+    <div className="container-fluid">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Spectrogram</th>
+            <th>Recording Name</th>
+            <th>Data Type</th>
+            <th>Freq [MHz]</th>
+            <th>Sample Rate [MHz]</th>
+            <th># of Annotations</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>{DisplayData}</tbody>
+      </table>
+    </div>
+  );
+}
 
 //  function TableRow({i, info}) {
 //     const [modal, setModal] = useState(false)
@@ -88,5 +80,4 @@ import Directory from './Directory';
 //     )
 //  }
 
-
- export default JsonDataDisplay;
+export default JsonDataDisplay;

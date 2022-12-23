@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 module.exports = {
-    experiments: {
-        topLevelAwait: true
-    },
+  experiments: {
+    topLevelAwait: true,
+  },
 };
