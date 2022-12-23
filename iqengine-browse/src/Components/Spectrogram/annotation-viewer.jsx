@@ -11,7 +11,7 @@ const AnnotationViewer = (props) => {
     const canvasAnnotationRef = useRef(null)
     const canvas = canvasAnnotationRef.current
     if (canvas && select_fft_return) {
-        console.log("Generating annotations", select_fft_return.fft_size)
+        //console.log("Generating annotations", select_fft_return.fft_size)
         const context = canvas.getContext('2d')
  
         const spectrogram_width_scale  =  select_fft_return.image_data ? props.spectrogram_width/select_fft_return.image_data.width : 1;

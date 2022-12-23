@@ -4,7 +4,7 @@
 import { createAsyncThunk} from "@reduxjs/toolkit";
 
 function convolve(array, taps) {
-    console.log(taps);
+    //console.log(taps);
     
     // make sure its an odd number of taps
     if (taps.length % 2 !== 1)
@@ -49,7 +49,6 @@ const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,{ getSt
 
     try {
         var startTime = performance.now()
-        let num_samples = 2000;
         let offset = state.blob.size;
 
         let bytes_per_sample = 2;
@@ -61,7 +60,7 @@ const FetchMoreData = createAsyncThunk("blob/FetchMoreData",  async (arg,{ getSt
             bytes_per_sample = 2;
         }
 
-        let count = 1024*num_samples*bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else. 
+        let count = 1024*2000*bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else. 
         const downloadBlockBlobResponse = await blobClient.download(offset, count);
         const blob = await downloadBlockBlobResponse.blobBody;
         const buffer = await blob.arrayBuffer();

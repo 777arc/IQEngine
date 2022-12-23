@@ -80,11 +80,26 @@ var previous_blob_size = 0;
 var previous_fft_size = 0;
 var previous_magnitude_max = 0;
 var previous_magnitude_min = 0;
-window.fft_data = new Uint8ClampedArray();
+window.fft_data = new Uint8ClampedArray(); // this is where our FFT outputs are stored
 window.annotations = []; // gets filled in before return
 window.sample_rate = 1; // will get filled in
 window.fft_size = 1; // will get filled in
 window.data_type = 'not defined yet';
+
+// This will get called when we go to a new spectrogram page
+export const clear_fft_data = () => {
+  previous_blob_size = 0;
+  previous_fft_size = 0;
+  previous_magnitude_max = 0;
+  previous_magnitude_min = 0;
+  window.fft_data = new Uint8ClampedArray(); // this is where our FFT outputs are stored
+  window.annotations = []; // gets filled in before return
+  window.sample_rate = 1; // will get filled in
+  window.fft_size = 1; // will get filled in
+  window.data_type = 'not defined yet';
+  window.iq_data = [] // initialized in blobSlice.js but we have to clear it each time we go to another spectrogram page
+  console.log("GOT HERE");
+}
 
 export const select_fft = (state) => {
     window.data_type = state.meta.global["core:datatype"]; // there might be a race condition here, but this line sets it, and it gets read in blobslice.js
@@ -108,7 +123,7 @@ export const select_fft = (state) => {
         let select_fft_return = {image_data: new ImageData(window.fft_data, w, h),
                                  annotations: window.annotations,
                                  sample_rate: window.sample_rate,
-                                 fft_size: window.fft_size};
+                                 fft_size: window.fft_size}; // scales will break without this
         return select_fft_return;
     }
     

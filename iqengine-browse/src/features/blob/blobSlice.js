@@ -17,6 +17,7 @@ const blobSlice = createSlice({
     reducers: {
         setScrollOffset: (state,action) => { state.scrollOffset = action.payload; },
         updateTaps: (state,action) => {state.taps = action.payload},
+        updateSize: (state,action) => {state.size = action.payload},
     },
     extraReducers: (builder) => {
         builder.addCase(FetchMoreData.pending, (state, action) => {
@@ -47,6 +48,6 @@ const blobSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateTaps } = blobSlice.actions
+export const { updateTaps, updateSize, setScrollOffset } = blobSlice.actions
 
 export default blobSlice.reducer;

@@ -31,7 +31,7 @@ export async function FetchMeta(dispatch, getState) {
     let sasToken = state.connection.sasToken;
 
     let blobName = useParams().recording + '.sigmf-meta'; // so we know which recording was clicked on
-    console.log(blobName);
+    //console.log(blobName);
     
     if (containerName === "") {
         console.error("container name was not filled out for some reason");
@@ -46,7 +46,7 @@ export async function FetchMeta(dispatch, getState) {
     const blob = await downloadBlockBlobResponse.blobBody;
     const meta_string = await blob.text();
     const meta_json = JSON.parse(meta_string);
-    console.log("Finished parsing the meta file");
+    //console.log("Finished parsing the meta file");
 
     dispatch({ type: 'meta/dataLoaded', payload: meta_json });
 
