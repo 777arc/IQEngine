@@ -20,7 +20,10 @@ export default function FileRow({i, info}) {
             <td className="align-middle">{info.sampleRate}</td>
             <td className="align-middle">
                 <div>
-                    <p onClick={toggle} ><a href="#">{info.numberOfAnnotation}</a></p>
+                    <button type="button" onClick={toggle}>
+                        {info.numberOfAnnotation}
+                    </button>
+
                     <Modal isOpen={modal} toggle={toggle} size='lg'>
                         <ModalHeader toggle={toggle}>{info.name}</ModalHeader>
                         <ModalBody>
