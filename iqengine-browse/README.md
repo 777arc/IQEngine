@@ -18,6 +18,7 @@ Run `npm run build` to use production mode (e.g. making sure all the deps still 
 
 You can serve the built files with
 ```
-sudo npm install -g serve
+npm install -g serve
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 serve -s build
 ```
