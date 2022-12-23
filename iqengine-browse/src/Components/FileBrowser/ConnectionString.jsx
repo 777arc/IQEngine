@@ -10,8 +10,8 @@ import Form from 'react-bootstrap/Form';
 
 function ConnectionStringInput (props) {
     const dispatch = useDispatch()
-    const [accountName, setAccountName] = useState('sigmffilerecordings'); // makes a new state within the component (not redux)
-    const [containerName, setContainerName] = useState('testsigmfrecordings');
+    const [accountName, setAccountName] = useState(process.env.REACT_APP_AZURE_BLOB_ACCOUNT_NAME); // makes a new state within the component (not redux)
+    const [containerName, setContainerName] = useState(process.env.REACT_APP_AZURE_BLOB_CONTAINER_NAME);
     const [sasToken, setSasToken] = useState(process.env.REACT_APP_AZURE_BLOB_SAS_TOKEN);
 
     const onAccountNameChange = (event) => { setAccountName(event.target.value); }; // updates it visually
