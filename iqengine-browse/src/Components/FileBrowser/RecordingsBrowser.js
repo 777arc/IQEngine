@@ -84,7 +84,7 @@ function JsonDataDisplay({ data }) {
 
   console.log(dataTree);
   const DisplayData = dataTree.map((info, i) => {
-    return <Directory files={info} />;
+    return <Directory key={Math.random()} files={info} />;
   });
 
   // Hide menu if the data hasnt loaded yet

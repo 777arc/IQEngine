@@ -40,13 +40,13 @@ const Directory = ({ files }) => {
           <td></td>
           <td></td>
         </tr>
-        {isExpanded && files.children.map((item) => <Directory files={item} />)}
+        {isExpanded && files.children.map((item) => <Directory key={Math.random()} files={item} />)}
       </>
     );
   }
   return (
     <>
-      <FileRow info={files} />
+      <FileRow key={Math.random()} info={files} />
     </>
   );
 };
