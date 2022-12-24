@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export default async function getFilesFromBlob(accountName, containerName, sasToken) {
-  const { BlobServiceClient } = require("@azure/storage-blob");
+  const { BlobServiceClient } = require('@azure/storage-blob');
 
   const baseUrl = `https://${accountName}.blob.core.windows.net/${containerName}/`;
   const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
@@ -12,9 +12,9 @@ export default async function getFilesFromBlob(accountName, containerName, sasTo
   const entries = [];
   for await (const blob of containerClient.listBlobsFlat()) {
     // only process meta-data files
-    if (blob.name.split(".").pop() === "sigmf-meta") {
+    if (blob.name.split('.').pop() === 'sigmf-meta') {
       const blobClient = containerClient.getBlobClient(blob.name);
-      const fName = blob.name.split(".")[0];
+      const fName = blob.name.split('.')[0];
 
       // Get blob content from position 0 to the end
       // In browsers, get downloaded data by accessing downloadBlockBlobResponse.blobBody
@@ -31,14 +31,14 @@ export default async function getFilesFromBlob(accountName, containerName, sasTo
 
       entries.push({
         name: fName,
-        sampleRate: obj["global"]["core:sample_rate"],
-        dataType: obj["global"]["core:datatype"],
-        frequency: obj["captures"][0]["core:frequency"] / 1e6, // Frequency in MHz
-        annotations: obj["annotations"],
-        numberOfAnnotation: obj["annotations"].length,
-        author: obj["global"]["core:author"],
-        type: "file",
-        thumbnailUrl: baseUrl + fName + ".png",
+        sampleRate: obj['global']['core:sample_rate'] / 1e6, // in MHz
+        dataType: obj['global']['core:datatype'],
+        frequency: obj['captures'][0]['core:frequency'] / 1e6, // in MHz
+        annotations: obj['annotations'],
+        numberOfAnnotation: obj['annotations'].length,
+        author: obj['global']['core:author'],
+        type: 'file',
+        thumbnailUrl: baseUrl + fName + '.png',
       });
     }
   }

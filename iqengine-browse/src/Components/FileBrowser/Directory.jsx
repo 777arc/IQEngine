@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState } from "react";
-import FileRow from "./File";
-import styled from "styled-components";
-import FolderIcon from "@mui/icons-material/Folder";
-import FolderOpen from "@mui/icons-material/FolderOpen";
+import { useState } from 'react';
+import FileRow from './File';
+import styled from 'styled-components';
+import FolderIcon from '@mui/icons-material/Folder';
+import FolderOpen from '@mui/icons-material/FolderOpen';
 
 const StyledOpenFolderIcon = styled(FolderOpen)`
   color: orange;
@@ -21,12 +21,13 @@ const StyledFolderIcon = styled(FolderIcon)`
   margin-right: 4px;
 `;
 
-const Directory = ({ id, files }) => {
+const Directory = ({ files }) => {
   const [isExpanded, toggleExpanded] = useState(false);
-  if (files.type === "folder") {
+  if (files.type === 'folder') {
     return (
       <>
-        <tr key={id}>
+        <tr>
+          <td></td>
           <td className="align-middle">
             <p onClick={() => toggleExpanded(!isExpanded)}>
               {isExpanded ? <StyledOpenFolderIcon /> : <StyledFolderIcon />}
@@ -38,15 +39,14 @@ const Directory = ({ id, files }) => {
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
         </tr>
-        {isExpanded && files.children.map((item) => <Directory id={id + 1} files={item} />)}
+        {isExpanded && files.children.map((item) => <Directory files={item} />)}
       </>
     );
   }
   return (
     <>
-      <FileRow key={id} info={files} />
+      <FileRow info={files} />
     </>
   );
 };

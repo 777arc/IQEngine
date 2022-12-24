@@ -1,24 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from "react";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
-export default function FileRow({ i, info }) {
+export default function FileRow({ info }) {
   const [modal, setModal] = useState(false);
   const toggle = () => {
     setModal(!modal);
   };
   return (
-    <tr key={i}>
+    <tr>
       <td>
         <div className="zoom">
-          <img src={info.thumbnailUrl} alt="Spectrogram Thumbnail" style={{ width: "200px", height: "100px" }} />
+          <img src={info.thumbnailUrl} alt="Spectrogram Thumbnail" style={{ width: '200px', height: '100px' }} />
         </div>
       </td>
       <td className="align-middle">
-        <Link to={"spectrogram/" + info.name}>{info.name}</Link>
+        <Link to={'spectrogram/' + info.name}>{info.name.replaceAll('(slash)', '/')}</Link>
       </td>
       <td className="align-middle">{info.dataType}</td>
       <td className="align-middle">{info.frequency}</td>
@@ -35,7 +35,7 @@ export default function FileRow({ i, info }) {
               {info.annotations.map((item, index) => {
                 return (
                   <div key={index}>
-                    <p>{JSON.stringify(item, null, "\t")}</p>
+                    <p>{JSON.stringify(item, null, '\t')}</p>
                   </div>
                 );
               })}

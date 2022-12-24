@@ -34,7 +34,7 @@ function GroupByFolder(files, root) {
           ...file,
           keyDerived: true,
           type: 'file',
-          name: file.name.split('/').pop(),
+          name: file.name.replaceAll('/', '(slash)'), // because we cant use slashes in the url, we undo this replace before grabbing the blob, as well as displaying it in the table
         });
       } else {
         if (folder in currentFolder.children === false) {
@@ -84,7 +84,7 @@ function JsonDataDisplay({ data }) {
 
   console.log(dataTree);
   const DisplayData = dataTree.map((info, i) => {
-    return <Directory key={i} files={info} />;
+    return <Directory files={info} />;
   });
 
   // Hide menu if the data hasnt loaded yet
@@ -98,12 +98,12 @@ function JsonDataDisplay({ data }) {
         <thead>
           <tr>
             <th>Spectrogram</th>
-            <th>Recording Name</th>
+            <th style={{ width: '25%' }}>Recording Name</th>
             <th>Data Type</th>
             <th>Freq [MHz]</th>
             <th>Sample Rate [MHz]</th>
             <th># of Annotations</th>
-            <th>Author</th>
+            <th style={{ width: '10%' }}>Author</th>
           </tr>
         </thead>
         <tbody>{DisplayData}</tbody>

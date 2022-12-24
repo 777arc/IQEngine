@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
-import JsonDataDisplay from './Components/FileBrowser/JSONDataDisplay';
+import JsonDataDisplay from './Components/FileBrowser/RecordingsBrowser';
 import NavBar from './Components/FileBrowser/NavBar';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 import '@fortawesome/react-fontawesome';

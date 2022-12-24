@@ -13,7 +13,7 @@ import { clear_fft_data } from '../../selector';
 function SpectrogramPage() {
   const dispatch = useDispatch();
 
-  dispatch(updateRecording(useParams().recording)); // the route is /spectrogram/:recording
+  dispatch(updateRecording(useParams().recording.replaceAll('(slash)', '/'))); // the route is /spectrogram/:recording.  we had to use a hack to allow for slashes in the name
 
   dispatch(updateSize(0)); // reset the number of samples downloaded when this page loads
   dispatch(setScrollOffset(0));
