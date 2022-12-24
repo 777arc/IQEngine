@@ -6,7 +6,9 @@ function NavBar() {
       <div className="container">
         <div className="row">
           <div className="col-sm">
-            <h1 className="display-1">IQEngine</h1>
+            <h1 className="display-1">
+              <Link to="/">IQEngine</Link>
+            </h1>
           </div>
           <div className="col-lg bs-component">
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
