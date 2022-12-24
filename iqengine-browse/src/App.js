@@ -4,11 +4,11 @@
 import React, { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/RecordingsBrowser';
-import NavBar from './Components/FileBrowser/NavBar';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +27,11 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar />
+        <h1 className="display-1">
+          <Link to="/">
+            <center>IQEngine</center>
+          </Link>
+        </h1>
 
         <Routes>
           <Route
