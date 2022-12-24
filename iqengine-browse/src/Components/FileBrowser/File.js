@@ -35,7 +35,7 @@ export default function FileRow({ info }) {
               {info.annotations.map((item, index) => {
                 return (
                   <div key={index}>
-                    <p>{JSON.stringify(item, null, '\t')}</p>
+                    <pre>{JSON.stringify(item, undefined, 4)}</pre>
                   </div>
                 );
               })}
