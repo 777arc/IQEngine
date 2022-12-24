@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from "react";
-import GetFilesFromBlob from "./DataFetcher";
-import { useDispatch } from "react-redux";
-import { updateAccountName, updateContainerName, updateSasToken } from "../../features/connection/connectionSlice";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import React, { useState } from 'react';
+import GetFilesFromBlob from './DataFetcher';
+import { useDispatch } from 'react-redux';
+import { updateAccountName, updateContainerName, updateSasToken } from '../../reducers/connectionSlice';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 function ConnectionStringInput(props) {
   const dispatch = useDispatch();

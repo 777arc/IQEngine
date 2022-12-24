@@ -4,8 +4,8 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSize, updateMagnitudeMax, updateMagnitudeMin } from '../../features/fft/fftSlice';
-import { updateTaps } from '../../features/blob/blobSlice';
+import { updateSize, updateMagnitudeMax, updateMagnitudeMin } from '../../reducers/fftSlice';
+import { updateTaps } from '../../reducers/blobSlice';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';

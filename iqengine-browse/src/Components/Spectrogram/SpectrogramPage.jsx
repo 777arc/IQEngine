@@ -1,13 +1,13 @@
 import { SpectrogramPanel } from './spectrogram-panel';
 import { Container, Row, Col } from 'react-bootstrap';
-import FetchMoreData from '../../features/blob/fetchMoreData';
-import { FetchMeta } from '../../features/meta/metaSlice';
+import FetchMoreData from '../../reducers/fetchMoreData';
+import { FetchMeta } from '../../reducers/metaSlice';
 import { useDispatch } from 'react-redux';
 import Sidebar from './sidebar';
-import { updateRecording } from '../../features/connection/connectionSlice';
+import { updateRecording } from '../../reducers/connectionSlice';
 import { useParams } from 'react-router-dom';
-import { updateSize } from '../../features/blob/blobSlice';
-import { setScrollOffset } from '../../features/blob/blobSlice';
+import { updateSize } from '../../reducers/blobSlice';
+import { setScrollOffset } from '../../reducers/blobSlice';
 import { clear_fft_data } from '../../selector';
 
 function SpectrogramPage() {

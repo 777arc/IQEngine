@@ -3,10 +3,10 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 
-import fftReducer from './features/fft/fftSlice';
-import blobReducer from './features/blob/blobSlice';
-import metaReducer from './features/meta/metaSlice';
-import connectionReducer from './features/connection/connectionSlice';
+import fftReducer from './reducers/fftSlice';
+import blobReducer from './reducers/blobSlice';
+import metaReducer from './reducers/metaSlice';
+import connectionReducer from './reducers/connectionSlice';
 import thunk from 'redux-thunk';
 
 const store = configureStore({

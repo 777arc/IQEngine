@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { updateDataType } from '../../features/fft/fftSlice';
+import { updateDataType } from '../../reducers/fftSlice';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
