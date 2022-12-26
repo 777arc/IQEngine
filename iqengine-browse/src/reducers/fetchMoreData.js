@@ -31,61 +31,75 @@ function convolve(array, taps) {
   return output;
 }
 
+function readFileAsync(file) {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
 const FetchMoreData = createAsyncThunk('blob/FetchMoreData', async (arg, { getState }) => {
   console.log('running FetchMoreData');
   let state = getState();
-  let accountName = state.connection.accountName;
-  let containerName = state.connection.containerName;
-  let sasToken = state.connection.sasToken;
 
-  while (state.connection.recording === '') {
-    console.log('waiting'); // hopefully this doesn't happen, and if it does it should be pretty quick because its the time it takes for the state to set
+  let offset = state.blob.size;
+
+  let bytes_per_sample = 2;
+  if (window.data_type === 'ci16_le') {
+    bytes_per_sample = 2;
+  } else if (window.data_type === 'cf32_le') {
+    bytes_per_sample = 4;
+  } else {
+    bytes_per_sample = 2;
   }
-  let blobName = state.connection.recording + '.sigmf-data';
 
-  // Get the blob client TODO: REFACTOR SO WE DONT HAVE TO REMAKE THE CLIENT EVERY TIME!
-  const { BlobServiceClient } = require('@azure/storage-blob');
-  const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlobClient(blobName);
+  let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
+  var startTime = performance.now();
+  let buffer;
+  if (state.connection.datafilehandle === '') {
+    // using Azure blob storage
+    let accountName = state.connection.accountName;
+    let containerName = state.connection.containerName;
+    let sasToken = state.connection.sasToken;
 
-  try {
-    var startTime = performance.now();
-    let offset = state.blob.size;
-
-    let bytes_per_sample = 2;
-    if (window.data_type === 'ci16_le') {
-      bytes_per_sample = 2;
-    } else if (window.data_type === 'cf32_le') {
-      bytes_per_sample = 4;
-    } else {
-      bytes_per_sample = 2;
+    while (state.connection.recording === '') {
+      console.log('waiting'); // hopefully this doesn't happen, and if it does it should be pretty quick because its the time it takes for the state to set
     }
+    let blobName = state.connection.recording + '.sigmf-data';
 
-    let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
+    // Get the blob client TODO: REFACTOR SO WE DONT HAVE TO REMAKE THE CLIENT EVERY TIME!
+    const { BlobServiceClient } = require('@azure/storage-blob');
+    const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(blobName);
     const downloadBlockBlobResponse = await blobClient.download(offset, count);
     const blob = await downloadBlockBlobResponse.blobBody;
-    const buffer = await blob.arrayBuffer();
-    var endTime = performance.now();
-    console.log('Fetching more data took', endTime - startTime, 'milliseconds');
-    let samples;
-    if (window.data_type === 'ci16_le') {
-      samples = new Int16Array(buffer);
-      samples = convolve(samples, state.blob.taps);
-      samples = Int16Array.from(samples); // convert back to int TODO: clean this up
-    } else if (window.data_type === 'cf32_le') {
-      samples = new Float32Array(buffer);
-      samples = convolve(samples, state.blob.taps);
-    } else {
-      console.error('unsupported data_type');
-      samples = new Int16Array(buffer);
-    }
-    return samples;
-  } catch (error) {
-    console.error(error);
-    // expected output: ReferenceError: nonExistentFunction is not defined
-    // Note - error messages will vary depending on browser
+    buffer = await blob.arrayBuffer();
+  } else {
+    // Use a local file
+    let handle = state.connection.datafilehandle;
+    const fileData = await handle.getFile();
+    buffer = await readFileAsync(fileData.slice(offset, offset + count));
   }
+  var endTime = performance.now();
+  console.log('Fetching more data took', endTime - startTime, 'milliseconds');
+  let samples;
+  if (window.data_type === 'ci16_le') {
+    samples = new Int16Array(buffer);
+    samples = convolve(samples, state.blob.taps);
+    samples = Int16Array.from(samples); // convert back to int TODO: clean this up
+  } else if (window.data_type === 'cf32_le') {
+    samples = new Float32Array(buffer);
+    samples = convolve(samples, state.blob.taps);
+  } else {
+    console.error('unsupported data_type');
+    samples = new Int16Array(buffer);
+  }
+  return samples;
 });
 
 export default FetchMoreData;

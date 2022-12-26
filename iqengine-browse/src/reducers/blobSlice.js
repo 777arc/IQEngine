@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { createSlice } from '@reduxjs/toolkit';
-import LocalFetchMoreData from './localfetchMoreData';
+import FetchMoreData from './fetchMoreData';
 
 window.iq_data = []; // This is GROSS!!! but it works?! I need a global way to store large binary variables.
 
@@ -23,10 +23,10 @@ const blobSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(LocalFetchMoreData.pending, (state, action) => {
+      .addCase(FetchMoreData.pending, (state, action) => {
         state.status = 'loading';
       })
-      .addCase(LocalFetchMoreData.fulfilled, (state, action) => {
+      .addCase(FetchMoreData.fulfilled, (state, action) => {
         let size = window.iq_data.length + action.payload.length; // Don't use byte length because the new array has to be specified by the num of elements not bytes
         state.status = 'idle';
         state.size = size;
@@ -45,7 +45,7 @@ const blobSlice = createSlice({
         new_iq_data.set(action.payload, window.iq_data.length); // again this is elements, not bytes
         window.iq_data = new_iq_data;
       })
-      .addCase(LocalFetchMoreData.rejected, (state, action) => {
+      .addCase(FetchMoreData.rejected, (state, action) => {
         state.status = 'error';
       });
   },

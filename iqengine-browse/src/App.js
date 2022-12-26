@@ -10,7 +10,6 @@ import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import LocalSpectrogramPage from './Components/Spectrogram/LocalSpectrogramPage';
 
 class App extends Component {
   constructor(props) {
@@ -50,9 +49,7 @@ class App extends Component {
             }
           />
 
-          <Route path="/spectrogram/:recording" element={this.state.recordingList.length !== 0 ? <SpectrogramPage /> : <Navigate to="/" />} />
-
-          <Route path="/localspectrogram" element={<LocalSpectrogramPage />} />
+          <Route path="/spectrogram/:recording" element={<SpectrogramPage />} />
         </Routes>
       </div>
     );
