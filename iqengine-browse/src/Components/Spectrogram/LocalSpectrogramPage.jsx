@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { updateSize } from '../../reducers/blobSlice';
 import { clear_fft_data } from '../../selector';
 
-async function LocalSpectrogramPage() {
+function LocalSpectrogramPage() {
   const dispatch = useDispatch();
 
   dispatch(updateSize(0)); // reset the number of samples downloaded when this page loads
