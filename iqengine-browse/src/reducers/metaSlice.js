@@ -24,27 +24,31 @@ export default function metaReducer(state = initialState, action) {
 export async function FetchMeta(dispatch, getState) {
   console.log('running fetchMeta');
   let state = getState();
-  let accountName = state.connection.accountName;
-  let containerName = state.connection.containerName;
-  let sasToken = state.connection.sasToken;
+  let meta_string = '';
+  let blobName = useParams().recording + '.sigmf-meta'; // has to go outside of condition or else react gets mad
+  if (state.connection.metafilehandle === '') {
+    let accountName = state.connection.accountName;
+    let containerName = state.connection.containerName;
+    let sasToken = state.connection.sasToken;
 
-  let blobName = useParams().recording + '.sigmf-meta'; // so we know which recording was clicked on
-  //console.log(blobName);
+    if (containerName === '') {
+      console.error('container name was not filled out for some reason');
+    }
 
-  if (containerName === '') {
-    console.error('container name was not filled out for some reason');
+    // Get the blob client
+    const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(blobName);
+
+    const downloadBlockBlobResponse = await blobClient.download();
+    const blob = await downloadBlockBlobResponse.blobBody;
+    meta_string = await blob.text();
+  } else {
+    let fileHandle = state.connection.metafilehandle;
+    const file = await fileHandle.getFile();
+    meta_string = await file.text();
   }
 
-  // Get the blob client
-  const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlobClient(blobName);
-
-  const downloadBlockBlobResponse = await blobClient.download();
-  const blob = await downloadBlockBlobResponse.blobBody;
-  const meta_string = await blob.text();
   const meta_json = JSON.parse(meta_string);
-  //console.log("Finished parsing the meta file");
-
   dispatch({ type: 'meta/dataLoaded', payload: meta_json });
 }

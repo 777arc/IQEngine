@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/RecordingsBrowser';
+import LocalFileChooser from './Components/FileBrowser/LocalFileChooser';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,13 +40,16 @@ class App extends Component {
             path="/"
             element={
               <>
+                <LocalFileChooser />
+                <p></p>
                 <ConnectionStringInput setRecordingList={this.setRecordingList} />
+
                 <JsonDataDisplay data={this.state.recordingList} />
               </>
             }
           />
 
-          <Route path="/spectrogram/:recording" element={this.state.recordingList.length !== 0 ? <SpectrogramPage /> : <Navigate to="/" />} />
+          <Route path="/spectrogram/:recording" element={<SpectrogramPage />} />
         </Routes>
       </div>
     );

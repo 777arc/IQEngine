@@ -7,7 +7,6 @@ import Sidebar from './sidebar';
 import { updateRecording } from '../../reducers/connectionSlice';
 import { useParams } from 'react-router-dom';
 import { updateSize } from '../../reducers/blobSlice';
-import { setScrollOffset } from '../../reducers/blobSlice';
 import { clear_fft_data } from '../../selector';
 
 function SpectrogramPage() {
@@ -16,7 +15,6 @@ function SpectrogramPage() {
   dispatch(updateRecording(useParams().recording.replaceAll('(slash)', '/'))); // the route is /spectrogram/:recording.  we had to use a hack to allow for slashes in the name
 
   dispatch(updateSize(0)); // reset the number of samples downloaded when this page loads
-  dispatch(setScrollOffset(0));
   clear_fft_data();
 
   dispatch(FetchMoreData()); // fetch IQ for the first time

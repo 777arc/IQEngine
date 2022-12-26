@@ -11,13 +11,9 @@ const blobSlice = createSlice({
   initialState: {
     size: 0,
     status: 'idle',
-    scrollOffset: 0,
     taps: new Float32Array(1).fill(1),
   },
   reducers: {
-    setScrollOffset: (state, action) => {
-      state.scrollOffset = action.payload;
-    },
     updateTaps: (state, action) => {
       state.taps = action.payload;
     },
@@ -56,6 +52,6 @@ const blobSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateTaps, updateSize, setScrollOffset } = blobSlice.actions;
+export const { updateTaps, updateSize } = blobSlice.actions;
 
 export default blobSlice.reducer;
