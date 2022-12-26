@@ -10,6 +10,8 @@ export const connectionSlice = createSlice({
     containerName: '',
     sasToken: '',
     recording: '',
+    metafilehandle: '',
+    datafilehandle: '',
   },
   reducers: {
     updateAccountName: (state, action) => {
@@ -24,10 +26,16 @@ export const connectionSlice = createSlice({
     updateRecording: (state, action) => {
       state.recording = action.payload;
     },
+    updateMetaFileHandle: (state, action) => {
+      state.metafilehandle = action.payload;
+    },
+    updateDataFileHandle: (state, action) => {
+      state.datafilehandle = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateAccountName, updateContainerName, updateSasToken, updateRecording } = connectionSlice.actions;
+export const { updateAccountName, updateContainerName, updateSasToken, updateRecording, updateMetaFileHandle, updateDataFileHandle } = connectionSlice.actions;
 
 export default connectionSlice.reducer;

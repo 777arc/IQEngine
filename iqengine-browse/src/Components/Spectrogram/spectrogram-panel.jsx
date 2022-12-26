@@ -6,7 +6,7 @@ import { AnnotationViewer } from './annotation-viewer';
 import { RulerTop } from './ruler-top';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import FetchMoreData from '../../reducers/fetchMoreData';
+import LocalFetchMoreData from '../../reducers/localfetchMoreData';
 
 const SpectrogramPanel = () => {
   const [isBottom, setIsBottom] = useState(false);
@@ -53,7 +53,7 @@ const SpectrogramPanel = () => {
   useEffect(() => {
     if (isBottom) {
       console.log('Fetching more Data! Current Blobsize: ' + size);
-      dispatch(FetchMoreData());
+      dispatch(LocalFetchMoreData());
     }
   }, [isBottom, size, dispatch]);
 

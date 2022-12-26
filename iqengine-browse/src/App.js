@@ -4,11 +4,13 @@
 import React, { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
 import JsonDataDisplay from './Components/FileBrowser/RecordingsBrowser';
+import LocalFileChooser from './Components/FileBrowser/LocalFileChooser';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import LocalSpectrogramPage from './Components/Spectrogram/LocalSpectrogramPage';
 
 class App extends Component {
   constructor(props) {
@@ -39,13 +41,18 @@ class App extends Component {
             path="/"
             element={
               <>
+                <LocalFileChooser />
+                <p></p>
                 <ConnectionStringInput setRecordingList={this.setRecordingList} />
+
                 <JsonDataDisplay data={this.state.recordingList} />
               </>
             }
           />
 
           <Route path="/spectrogram/:recording" element={this.state.recordingList.length !== 0 ? <SpectrogramPage /> : <Navigate to="/" />} />
+
+          <Route path="/localspectrogram" element={<LocalSpectrogramPage />} />
         </Routes>
       </div>
     );

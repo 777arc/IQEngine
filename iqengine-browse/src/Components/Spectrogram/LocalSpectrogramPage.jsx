@@ -1,6 +1,6 @@
 import { SpectrogramPanel } from './spectrogram-panel';
 import { Container, Row, Col } from 'react-bootstrap';
-import FetchMoreData from '../../reducers/fetchMoreData';
+import LocalFetchMoreData from '../../reducers/localfetchMoreData';
 import { FetchMeta } from '../../reducers/metaSlice';
 import { useDispatch } from 'react-redux';
 import Sidebar from './sidebar';
@@ -9,15 +9,13 @@ import { useParams } from 'react-router-dom';
 import { updateSize } from '../../reducers/blobSlice';
 import { clear_fft_data } from '../../selector';
 
-function SpectrogramPage() {
+async function LocalSpectrogramPage() {
   const dispatch = useDispatch();
-
-  dispatch(updateRecording(useParams().recording.replaceAll('(slash)', '/'))); // the route is /spectrogram/:recording.  we had to use a hack to allow for slashes in the name
 
   dispatch(updateSize(0)); // reset the number of samples downloaded when this page loads
   clear_fft_data();
 
-  dispatch(FetchMoreData()); // fetch IQ for the first time
+  dispatch(LocalFetchMoreData()); // fetch IQ for the first time
   dispatch(FetchMeta); // fetch the metadata
 
   return (
@@ -36,4 +34,4 @@ function SpectrogramPage() {
   );
 }
 
-export default SpectrogramPage;
+export default LocalSpectrogramPage;
