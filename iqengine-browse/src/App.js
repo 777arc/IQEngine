@@ -48,6 +48,10 @@ class App extends Component {
                     <Col>
                       <LocalFileChooser setRecordingList={this.setRecordingList} />
                     </Col>
+                    <Col md="auto">
+                      <br />
+                      <div class="vr" style={{ opacity: 0.6, minHeight: 250 }}></div>
+                    </Col>
                     <Col>
                       <ConnectionStringInput setRecordingList={this.setRecordingList} />
                     </Col>
