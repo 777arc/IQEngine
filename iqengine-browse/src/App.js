@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import ConnectionStringInput from './Components/FileBrowser/ConnectionString';
-import JsonDataDisplay from './Components/FileBrowser/RecordingsBrowser';
+import RecordingsBrowser from './Components/FileBrowser/RecordingsBrowser';
 import LocalFileChooser from './Components/FileBrowser/LocalFileChooser';
 import SpectrogramPage from './Components/Spectrogram/SpectrogramPage';
 import '@fortawesome/react-fontawesome';
@@ -40,11 +40,11 @@ class App extends Component {
             path="/"
             element={
               <>
-                <LocalFileChooser />
+                <LocalFileChooser setRecordingList={this.setRecordingList} />
                 <p></p>
                 <ConnectionStringInput setRecordingList={this.setRecordingList} />
 
-                <JsonDataDisplay data={this.state.recordingList} />
+                <RecordingsBrowser data={this.state.recordingList} />
               </>
             }
           />

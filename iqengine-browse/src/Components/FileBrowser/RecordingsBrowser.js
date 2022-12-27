@@ -74,7 +74,7 @@ function GroupByFolder(files, root) {
   return files;
 }
 
-function JsonDataDisplay({ data }) {
+export default function RecordingsBrowser({ data }) {
   const gfiles = data.map((data) => data.name);
   let dataTree = [];
 
@@ -82,7 +82,7 @@ function JsonDataDisplay({ data }) {
     dataTree = GroupByFolder(data, '');
   }
 
-  console.log(dataTree);
+  //console.log(dataTree);
   const DisplayData = dataTree.map((info, i) => {
     return <Directory key={Math.random()} files={info} />;
   });
@@ -111,5 +111,3 @@ function JsonDataDisplay({ data }) {
     </div>
   );
 }
-
-export default JsonDataDisplay;
