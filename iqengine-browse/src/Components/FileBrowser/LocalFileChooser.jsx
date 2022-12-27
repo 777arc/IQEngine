@@ -24,8 +24,8 @@ export default function LocalFileChooser(props) {
     }
   }
 
-  // this is duplicate of the code in ConnectionString.jsx but when i tried to stick it in a separate js file i would get browser errors
-  function parseMeta(json_string, baseUrl, fName) {
+  // this is duplicate of the code in ConnectionString.jsx but includes file handles
+  function parseMeta(json_string, baseUrl, fName, metaFileHandle, dataFileHandle) {
     const obj = JSON.parse(json_string); // string to JSON
     return {
       name: fName,
@@ -37,6 +37,8 @@ export default function LocalFileChooser(props) {
       author: obj['global']['core:author'],
       type: 'file',
       thumbnailUrl: baseUrl + fName + '.png',
+      metaFileHandle: metaFileHandle,
+      dataFileHandle: dataFileHandle,
     };
   }
 
@@ -55,11 +57,15 @@ export default function LocalFileChooser(props) {
     for await (const entry of handle.values()) {
       if (entry.kind === 'file') {
         const file = await entry.getFile();
-        //let filerreader = new FileReader();
-        //const json_string = filerreader.readAsText(file);
         if (file.name.split('.').pop() === 'sigmf-meta') {
-          const json_string = await readFileAsync(file);
-          out.push(parseMeta(json_string, 'local/', dir + file.name));
+          // Find the .sigmf-data file to go along with this meta file, and if not found then dont add the meta file
+          for await (const val of handle.values()) {
+            // FIXME: there might be a bug here when there are multiple files of the same name in diff directories...
+            if (val.name === file.name.replace('sigmf-meta', 'sigmf-data')) {
+              const json_string = await readFileAsync(file); // grab the metafile text
+              out.push(parseMeta(json_string, 'local/', dir + file.name, entry, val));
+            }
+          }
         }
       }
       if (entry.kind === 'directory') {
@@ -70,16 +76,11 @@ export default function LocalFileChooser(props) {
     return out;
   }
 
-  async function getFilesFromLocalDir(dirHandle) {
-    const entries = await handleDirectoryEntry(dirHandle, [], '');
-    console.log(entries);
-    return entries;
-  }
-
   const OpenDir = async () => {
     const dirHandle = await window.showDirectoryPicker();
-    let tempout = await getFilesFromLocalDir(dirHandle);
-    props.setRecordingList(tempout); // updates the parent (App.js) state with the RecordingList
+    const entries = await handleDirectoryEntry(dirHandle, [], '');
+    console.log(entries);
+    props.setRecordingList(entries); // updates the parent (App.js) state with the RecordingList
   };
 
   // Need to clear these states whenever we go to the main page, because we use them to figure out if we loaded a local file later on

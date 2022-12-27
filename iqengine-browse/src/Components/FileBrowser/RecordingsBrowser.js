@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-// import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import Directory from './Directory';
 
 function isFolder(file) {
@@ -55,8 +54,8 @@ function GroupByFolder(files, root) {
     }
     let files = [];
     for (const folder in level.children) {
-      console.log('children');
-      console.log(folder);
+      //console.log('children');
+      //console.log(folder);
       files.push({
         ...level.children[folder],
         contents: undefined,

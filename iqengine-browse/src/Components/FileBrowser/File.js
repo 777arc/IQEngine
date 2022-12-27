@@ -18,7 +18,9 @@ export default function FileRow({ info }) {
         </div>
       </td>
       <td className="align-middle">
-        <Link to={'spectrogram/' + info.name}>{info.name.replaceAll('(slash)', '/')}</Link>
+        <Link to={'spectrogram/' + info.name.replace('.sigmf-meta', '')} state={{ metaFileHandle: info.metaFileHandle, dataFileHandle: info.dataFileHandle }}>
+          {info.name.replaceAll('(slash)', '/').replace('.sigmf-meta', '')}
+        </Link>
       </td>
       <td className="align-middle">{info.dataType}</td>
       <td className="align-middle">{info.frequency}</td>

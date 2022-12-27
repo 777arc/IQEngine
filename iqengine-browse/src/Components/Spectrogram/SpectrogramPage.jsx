@@ -5,12 +5,23 @@ import { FetchMeta } from '../../reducers/metaSlice';
 import { useDispatch } from 'react-redux';
 import Sidebar from './sidebar';
 import { updateRecording } from '../../reducers/connectionSlice';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { updateSize } from '../../reducers/blobSlice';
 import { clear_fft_data } from '../../selector';
+import { updateMetaFileHandle, updateDataFileHandle } from '../../reducers/connectionSlice';
 
 function SpectrogramPage() {
   const dispatch = useDispatch();
+
+  const { state } = useLocation();
+  // if we entered here from clicking a local file on the list, set the filehandlers
+  if (state) {
+    if (state.metaFileHandle) {
+      console.log('setting meta and data file handlers');
+      dispatch(updateMetaFileHandle(state.metaFileHandle)); // store it in redux
+      dispatch(updateDataFileHandle(state.dataFileHandle)); // assume other file is data
+    }
+  }
 
   dispatch(updateRecording(useParams().recording.replaceAll('(slash)', '/'))); // the route is /spectrogram/:recording.  we had to use a hack to allow for slashes in the name
 
