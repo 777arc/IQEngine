@@ -89,9 +89,10 @@ export default function LocalFileChooser(props) {
 
   return (
     <div className="container-fluid">
-      <Button onClick={OpenFile}>Open Local .sigmf-data File</Button>
-      <br /> <br />
+      <h4 style={{ textAlign: 'center' }}>Browse Local Files</h4>
       <Button onClick={OpenDir}>Open Local Directory</Button>
+      &nbsp; &nbsp; or &nbsp; &nbsp;
+      <Button onClick={OpenFile}>Select 1 .sigmf-meta and 1 .sigmf-data</Button>
       <br />
     </div>
   );

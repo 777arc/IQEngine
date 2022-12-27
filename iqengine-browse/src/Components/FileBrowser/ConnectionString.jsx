@@ -33,6 +33,7 @@ export default function ConnectionStringInput(props) {
 
   return (
     <div id="ConnectionStringContainer" className="container-fluid">
+      <h4 style={{ textAlign: 'center' }}>Browse Azure Blob Storage</h4>
       <div className="form-group">
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Storage Account Name:</Form.Label>

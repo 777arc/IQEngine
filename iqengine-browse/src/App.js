@@ -10,6 +10,9 @@ import '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 class App extends Component {
   constructor(props) {
@@ -40,9 +43,16 @@ class App extends Component {
             path="/"
             element={
               <>
-                <LocalFileChooser setRecordingList={this.setRecordingList} />
-                <p></p>
-                <ConnectionStringInput setRecordingList={this.setRecordingList} />
+                <Container>
+                  <Row>
+                    <Col>
+                      <LocalFileChooser setRecordingList={this.setRecordingList} />
+                    </Col>
+                    <Col>
+                      <ConnectionStringInput setRecordingList={this.setRecordingList} />
+                    </Col>
+                  </Row>
+                </Container>
 
                 <RecordingsBrowser data={this.state.recordingList} />
               </>

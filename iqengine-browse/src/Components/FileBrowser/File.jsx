@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 export default function FileRow({ info }) {
   const [modal, setModal] = useState(false);
@@ -27,9 +28,9 @@ export default function FileRow({ info }) {
       <td className="align-middle">{info.sampleRate}</td>
       <td className="align-middle">
         <div>
-          <button type="button" onClick={toggle}>
+          <Button type="button" onClick={toggle}>
             {info.numberOfAnnotation}
-          </button>
+          </Button>
 
           <Modal isOpen={modal} toggle={toggle} size="lg">
             <ModalHeader toggle={toggle}>{info.name}</ModalHeader>
