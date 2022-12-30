@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useSelector } from 'react-redux';
-import { select_fft } from '../../selector';
+import { select_fft } from '../../Utils/selector';
 import React, { useRef } from 'react';
 
 const SpectrogramViewer = (props) => {
-  let select_fft_return = useSelector((state) => select_fft(state)); // select_fft_return.image_data grows each time we grab more samples
+  let select_fft_return = select_fft(props); // select_fft_return.image_data grows each time we grab more samples
   //const dispatch = useDispatch();
   const canvasRef = useRef(null);
   const canvas = canvasRef.current;
