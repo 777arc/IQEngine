@@ -47,6 +47,11 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   const { connection, blob } = args;
   let offset = blob.size;
 
+  // FIXME the first time this function is called, the data_type hasnt been set yet
+  if (window.data_type === 'not defined yet') {
+    return new Int16Array(0);
+  }
+
   let bytes_per_sample = 2;
   if (window.data_type === 'ci16_le') {
     bytes_per_sample = 2;
@@ -57,6 +62,7 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   }
 
   let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
+  //let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
   let startTime = performance.now();
   let buffer;
   if (connection.datafilehandle === undefined) {
@@ -80,6 +86,7 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
     // Use a local file
     let handle = connection.datafilehandle;
     const fileData = await handle.getFile();
+    console.log('offset:', offset, 'count:', count);
     buffer = await readFileAsync(fileData.slice(offset, offset + count));
   }
   let endTime = performance.now();

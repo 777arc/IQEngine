@@ -20,8 +20,9 @@ const initialState = {
 
 const fetchMoreDataSuccessUpdates = (action) => {
   let size = window.iq_data.length + action.payload.length; // Don't use byte length because the new array has to be specified by the num of elements not bytes
-
+  // Copy existing IQ samples to new_iq_data, then append the new IQ samples, then save it back to window.iq_data
   let new_iq_data;
+  // TODO: would be nice to get rid of window.data_type and just have it only stored in meta
   if (window.data_type === 'ci16_le') {
     new_iq_data = new Int16Array(size);
   } else if (window.data_type === 'cf32_le') {
@@ -30,11 +31,11 @@ const fetchMoreDataSuccessUpdates = (action) => {
     console.error('unsupported data_type');
     new_iq_data = new Int16Array(size);
   }
-
-  // Copy existing IQ samples to new_iq_data, then append the new IQ samples, then save it back to window.iq_data
   new_iq_data.set(window.iq_data, 0); // 2nd arg of set() is the offset into the target array at which to begin writing values from the source array
   new_iq_data.set(action.payload, window.iq_data.length); // see above comment.  units are elements, not bytes!
   window.iq_data = new_iq_data;
+
+  //window.iq_data.push(...action.payload); // this replaces the entire code above
 };
 
 export default function blobReducer(state = initialState, action) {
