@@ -91,7 +91,13 @@ export const select_fft = (state) => {
 
   // loop through each row
   for (let i = starting_row; i < num_ffts; i++) {
-    const samples_slice = window.iq_data.slice(i * fft_size * 2, (i + 1) * fft_size * 2); // mult by 2 because this is int/floats not IQ samples
+    let samples_slice = window.iq_data.slice(i * fft_size * 2, (i + 1) * fft_size * 2); // mult by 2 because this is int/floats not IQ samples
+
+    // Apply a hamming window
+    for (let window_i = 0; window_i < fft_size; window_i++) {
+      samples_slice[window_i] = samples_slice[window_i] * (0.54 - 0.46 * Math.cos((2 * Math.PI * window_i) / (fft_size - 1)));
+    }
+
     const f = new FFT(fft_size);
     const out = f.createComplexArray(); // creates an empty array the length of fft.size*2
     f.transform(out, samples_slice); // assumes input (2nd arg) is in form IQIQIQIQ and twice the length of fft.size
