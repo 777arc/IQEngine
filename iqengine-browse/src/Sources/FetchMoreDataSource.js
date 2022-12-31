@@ -45,11 +45,10 @@ function readFileAsync(file) {
 const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   console.log('running FetchMoreData');
   const { connection, blob } = args;
-  let offset = blob.size;
 
   // FIXME the first time this function is called, the data_type hasnt been set yet
   if (window.data_type === 'not defined yet') {
-    return new Int16Array(0);
+    return new Int16Array(0); // return no samples
   }
 
   let bytes_per_sample = 2;
@@ -60,9 +59,10 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   } else {
     bytes_per_sample = 2;
   }
+  let offset = blob.size * bytes_per_sample; // offset is in bytes
+  let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
+  //let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
 
-  let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
-  //let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else.
   let startTime = performance.now();
   let buffer;
   if (connection.datafilehandle === undefined) {
@@ -79,6 +79,7 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
     const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net?${sasToken}`);
     const containerClient = blobServiceClient.getContainerClient(containerName);
     const blobClient = containerClient.getBlobClient(blobName);
+    console.log('offset:', offset, 'count:', count);
     const downloadBlockBlobResponse = await blobClient.download(offset, count);
     const blob = await downloadBlockBlobResponse.blobBody;
     buffer = await blob.arrayBuffer();
