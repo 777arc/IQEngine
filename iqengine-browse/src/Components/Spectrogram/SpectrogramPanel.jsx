@@ -16,15 +16,7 @@ const SpectrogramPanel = (props) => {
 
   let spectrogram_width = dimensions.width - text_width - timescale_width;
 
-  const checkSize = () => {
-    const panel = document.getElementById('spectrogram-panel');
-    setDimensions({
-      width: panel.offsetWidth,
-      height: panel.offsetHeight,
-    });
-  };
-
-  let { initFetchMoreBlob, connection, blob } = props;
+  let { initFetchMoreBlob, connection, blob, meta } = props;
   let { size, status } = props.blob;
 
   useEffect(() => {
@@ -42,6 +34,14 @@ const SpectrogramPanel = (props) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isBottom, size]);
 
+  const checkSize = () => {
+    const panel = document.getElementById('spectrogram-panel');
+    setDimensions({
+      width: panel.offsetWidth,
+      height: panel.offsetHeight,
+    });
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     checkSize();
@@ -53,9 +53,9 @@ const SpectrogramPanel = (props) => {
     if (isBottom) {
       console.log('Fetching more Data! Current Blobsize: ' + size);
       blob.size = size;
-      initFetchMoreBlob({ connection: connection, blob: blob });
+      initFetchMoreBlob({ connection: connection, blob: blob, meta: meta });
     }
-  }, [isBottom, size, initFetchMoreBlob, blob, connection]);
+  }, [isBottom, size, initFetchMoreBlob, blob, connection, meta]);
 
   useEffect(() => {
     if (isBottom && status === 'idle') {
@@ -63,6 +63,7 @@ const SpectrogramPanel = (props) => {
       setIsBottom(false);
     }
   }, [isBottom, status, size]);
+
   return (
     <div>
       <div id="spectrogram-panel" style={{ display: 'grid', position: 'relative' }}>

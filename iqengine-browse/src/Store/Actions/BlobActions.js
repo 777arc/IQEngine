@@ -32,7 +32,7 @@ export const fetchMoreDataFailure = (_) => ({
 });
 
 export const resetBlob = () => ({
-    type: RESET_BLOB_OBJ,
-})
+  type: RESET_BLOB_OBJ,
+});
 
 export const initFetchMoreBlob = (args) => FetchMoreData(args);

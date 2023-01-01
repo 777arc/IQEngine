@@ -23,6 +23,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    // I don't think the order of these matter, it's not actually calling the functions here, right?
     updateConnectionAccountName: (accountName) => dispatch(updateConnectionAccountName(accountName)),
     updateConnectionContainerName: (containerName) => dispatch(updateConnectionContainerName(containerName)),
     updateConnectionSasToken: (token) => dispatch(updateConnectionSasToken(token)),

@@ -18,13 +18,13 @@ class SpectrogramPage extends Component {
   }
 
   componentDidMount() {
-    let { initFetchMoreBlob, fetchMetaDataBlob, connection, blob } = this.props;
+    let { initFetchMoreBlob, fetchMetaDataBlob, connection, blob, meta } = this.props;
     // the route is /spectrogram/:recording.  we had to use a hack to allow for slashes in the name
     window.iq_data = [];
     clear_fft_data();
 
-    initFetchMoreBlob({ connection: connection, blob: blob }); // fetch IQ for the first time
     fetchMetaDataBlob(connection); // fetch the metadata
+    //initFetchMoreBlob({ connection: connection, blob: blob, meta: meta }); // fetch IQ for the first time
   }
 
   componentWillUnmount() {

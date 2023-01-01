@@ -17,7 +17,6 @@ window.fft_data = new Uint8ClampedArray(); // this is where our FFT outputs are 
 window.annotations = []; // gets filled in before return
 window.sample_rate = 1; // will get filled in
 window.fft_size = 1; // will get filled in
-window.data_type = 'not defined yet';
 
 // This will get called when we go to a new spectrogram page
 export const clear_fft_data = () => {
@@ -29,12 +28,10 @@ export const clear_fft_data = () => {
   window.annotations = []; // gets filled in before return
   window.sample_rate = 1; // will get filled in
   window.fft_size = 1; // will get filled in
-  window.data_type = 'not defined yet';
   window.iq_data = []; // initialized in blobSlice.js but we have to clear it each time we go to another spectrogram page
 };
 
 export const select_fft = (state) => {
-  window.data_type = state.meta.global['core:datatype'];
   let blob_size = state.blob.size; // this is actually the number of int16's that have been downloaded so far
   let fft_size = state.fft.size;
   window.fft_size = fft_size;

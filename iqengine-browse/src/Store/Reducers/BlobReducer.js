@@ -19,6 +19,7 @@ const initialState = {
 };
 
 const fetchMoreDataSuccessUpdates = (action) => {
+  /*
   let size = window.iq_data.length + action.payload.length; // Don't use byte length because the new array has to be specified by the num of elements not bytes
   // Copy existing IQ samples to new_iq_data, then append the new IQ samples, then save it back to window.iq_data
   let new_iq_data;
@@ -34,8 +35,8 @@ const fetchMoreDataSuccessUpdates = (action) => {
   new_iq_data.set(window.iq_data, 0); // 2nd arg of set() is the offset into the target array at which to begin writing values from the source array
   new_iq_data.set(action.payload, window.iq_data.length); // see above comment.  units are elements, not bytes!
   window.iq_data = new_iq_data;
-
-  //window.iq_data.push(...action.payload); // this replaces the entire code above
+  */
+  window.iq_data.push(...action.payload); // this could replace the entire code above, as long as we only grab <100k samples at a time (call stack limit)
 };
 
 export default function blobReducer(state = initialState, action) {

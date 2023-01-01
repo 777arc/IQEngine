@@ -44,24 +44,26 @@ function readFileAsync(file) {
 
 const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   console.log('running FetchMoreData');
-  const { connection, blob } = args;
+  const { connection, blob, meta } = args;
 
   // FIXME the first time this function is called, the data_type hasnt been set yet
-  if (window.data_type === 'not defined yet') {
+  if (!meta.global['core:datatype']) {
+    console.log("WARNING: data_type hasn't been set yet");
     return new Int16Array(0); // return no samples
   }
+  const data_type = meta.global['core:datatype'];
 
   let bytes_per_sample = 2;
-  if (window.data_type === 'ci16_le') {
+  if (data_type === 'ci16_le') {
     bytes_per_sample = 2;
-  } else if (window.data_type === 'cf32_le') {
+  } else if (data_type === 'cf32_le') {
     bytes_per_sample = 4;
   } else {
     bytes_per_sample = 2;
   }
   let offset = blob.size * bytes_per_sample; // offset is in bytes
-  let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
-  //let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
+  //let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
+  let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
 
   let startTime = performance.now();
   let buffer;
@@ -93,11 +95,11 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
   let endTime = performance.now();
   console.log('Fetching more data took', endTime - startTime, 'milliseconds');
   let samples;
-  if (window.data_type === 'ci16_le') {
+  if (data_type === 'ci16_le') {
     samples = new Int16Array(buffer);
     samples = convolve(samples, blob.taps);
     samples = Int16Array.from(samples); // convert back to int TODO: clean this up
-  } else if (window.data_type === 'cf32_le') {
+  } else if (data_type === 'cf32_le') {
     samples = new Float32Array(buffer);
     samples = convolve(samples, blob.taps);
   } else {
