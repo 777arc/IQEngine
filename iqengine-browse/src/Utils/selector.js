@@ -32,6 +32,7 @@ export const clear_fft_data = () => {
 
 export const select_fft = (blob, fft, meta) => {
   let blob_size = blob.size; // this is actually the number of int16's that have been downloaded so far
+  console.log('===== blob_size', blob_size);
   let fft_size = fft.size;
   let magnitude_max = fft.magnitudeMax;
   let magnitude_min = fft.magnitudeMin;
