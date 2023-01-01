@@ -70,11 +70,7 @@ export default function blobReducer(state = initialState, action) {
         status: 'error',
       };
     case RESET_BLOB_OBJ:
-      return {
-        size: 0,
-        status: 'idle',
-        taps: new Float32Array(1).fill(1),
-      };
+      return initialState;
     default:
       return {
         ...state,

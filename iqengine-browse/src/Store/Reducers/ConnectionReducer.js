@@ -52,14 +52,7 @@ export default function connectionReducer(state = initialState, action) {
         datafilehandle: action.payload,
       };
     case RESET_CONNECTION_OBJ:
-      return {
-        accountName: '',
-        containerName: '',
-        sasToken: '',
-        recording: '',
-        metafilehandle: '',
-        datafilehandle: '',
-      }
+      return initialState;
     default:
       return {
         ...state,

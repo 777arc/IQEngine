@@ -27,11 +27,7 @@ export default function fftReducer(state = initialState, action) {
         magnitudeMin: action.payload,
       };
     case RESET_FFT_OBJ: {
-      return {
-        size: 1024,
-        magnitudeMax: 255,
-        magnitudeMin: 30,
-      };
+      return initialState;
     }
     default:
       return {
