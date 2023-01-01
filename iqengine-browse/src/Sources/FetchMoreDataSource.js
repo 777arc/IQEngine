@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { COUNT_PER_FETCH } from '../Utils/constants';
 
 function convolve(array, taps) {
   //console.log(taps);
@@ -62,8 +63,7 @@ const FetchMoreData = createAsyncThunk('FetchMoreData', async (args) => {
     bytes_per_sample = 2;
   }
   let offset = blob.size * bytes_per_sample; // offset is in bytes
-  //let count = 1024 * 2000 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
-  let count = 1024 * 100 * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
+  let count = COUNT_PER_FETCH * bytes_per_sample; // must be a power of 2, FFT currently doesnt support anything else
 
   let startTime = performance.now();
   let buffer;

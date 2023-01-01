@@ -36,7 +36,7 @@ const fetchMoreDataSuccessUpdates = (action) => {
   new_iq_data.set(action.payload, window.iq_data.length); // see above comment.  units are elements, not bytes!
   window.iq_data = new_iq_data;
   */
-  window.iq_data.push(...action.payload); // this could replace the entire code above, as long as we only grab <100k samples at a time (call stack limit)
+  window.iq_data.push(...action.payload); // this could replace the entire code above, as long as we only grab <=100k samples at a time (call stack limit)
 };
 
 export default function blobReducer(state = initialState, action) {
@@ -57,7 +57,7 @@ export default function blobReducer(state = initialState, action) {
         status: 'loading',
       };
     case FETCH_MORE_DATA_SUCCESS:
-      const size = window.iq_data.length + action.payload.length;
+      const size = window.iq_data.length + action.payload.length; // payload is the new samples downloaded
       fetchMoreDataSuccessUpdates(action);
       return {
         ...state,
