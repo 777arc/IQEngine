@@ -10,15 +10,13 @@ class SpectrogramPage extends Component {
     this.state = {
       connection: props.connection,
       blob: props.blob,
-      fftSize: 1024,
-      magnitudeMax: 255,
-      magnitudeMin: 30,
       meta: props.meta,
+      fft: props.fft,
     };
   }
 
   componentDidMount() {
-    let { initFetchMoreBlob, fetchMetaDataBlob, connection, blob, meta } = this.props;
+    let { initFetchMoreBlob, fetchMetaDataBlob, connection, blob, meta, fft } = this.props;
     window.iq_data = [];
     clear_fft_data();
 
@@ -33,6 +31,7 @@ class SpectrogramPage extends Component {
     this.props.resetBlob();
   }
 
+  // Not sure why we can do fft but not blob (we have to do blob.size)?
   static getDerivedStateFromProps(props, state) {
     let newState = state;
     if (JSON.stringify(props.meta) !== JSON.stringify(state.meta)) {
@@ -41,44 +40,27 @@ class SpectrogramPage extends Component {
     if (props.blob.size !== state.blob.size) {
       newState.blob.size = props.blob.size;
     }
+    if (props.fft !== state.fft) {
+      newState.fft = props.fft;
+    }
     return { ...newState };
   }
 
-  handleFftSize = (size) => {
-    this.setState({
-      fftSize: size,
-    });
-  };
-
-  handleMagnitudeMin = (min) => {
-    this.setState({
-      magnitudeMin: min,
-    });
-  };
-
-  handleMagnitudeMax = (max) => {
-    this.setState({
-      magnitudeMax: max,
-    });
-  };
-
   render() {
-    const { magnitudeMax, magnitudeMin, fftSize, blob, meta } = this.state;
-    const fftState = {
-      magnitudeMax: magnitudeMax,
-      magnitudeMin: magnitudeMin,
-      size: fftSize,
-    };
+    const { blob, meta, fft } = this.state;
+
     return (
       <div>
         <Container fluid>
           <Row className="flex-nowrap">
             <Col className="col-3">
               <Sidebar
-                handleFftSize={this.handleFftSize}
-                handleMagnitudeMax={this.handleMagnitudeMax}
-                handleMagnitudeMin={this.handleMagnitudeMin}
                 updateBlobTaps={this.props.updateBlobTaps}
+                updateMagnitudeMax={this.props.updateMagnitudeMax}
+                updateMagnitudeMin={this.props.updateMagnitudeMin}
+                updateFftsize={this.props.updateFftsize}
+                fft={fft}
+                blob={blob}
                 meta={meta}
               />
             </Col>
@@ -86,7 +68,7 @@ class SpectrogramPage extends Component {
               <SpectrogramPanel
                 initFetchMoreBlob={this.props.initFetchMoreBlob}
                 connection={this.state.connection}
-                fft={fftState}
+                fft={fft}
                 blob={blob}
                 meta={meta}
               />

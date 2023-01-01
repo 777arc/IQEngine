@@ -5,10 +5,12 @@ export const updateFFTSize = (payload) => ({
   payload,
 });
 
-export const updateFFTMagnitudeMax = (payload) => ({
-  type: UPDATE_FFT_MAGNITUDE_MAX,
-  payload,
-});
+export function updateFFTMagnitudeMax(payload) {
+  return {
+    type: UPDATE_FFT_MAGNITUDE_MAX,
+    payload,
+  };
+}
 
 export const updateFFTMagnitudeMin = (payload) => ({
   type: UPDATE_FFT_MAGNITUDE_MIN,

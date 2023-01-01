@@ -5,7 +5,9 @@ import { select_fft } from '../../Utils/selector';
 import React, { useRef } from 'react';
 
 const AnnotationViewer = (props) => {
-  let select_fft_return = select_fft(props);
+  let { blob, fft, meta } = props;
+
+  let select_fft_return = select_fft(blob, fft, meta);
 
   const canvasAnnotationRef = useRef(null);
   const canvas = canvasAnnotationRef.current;

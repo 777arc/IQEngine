@@ -31,12 +31,13 @@ export const clear_fft_data = () => {
   window.iq_data = []; // initialized in blobSlice.js but we have to clear it each time we go to another spectrogram page
 };
 
-export const select_fft = (state) => {
-  let blob_size = state.blob.size; // this is actually the number of int16's that have been downloaded so far
-  let fft_size = state.fft.size;
+export const select_fft = (blob, fft, meta) => {
+  let blob_size = blob.size; // this is actually the number of int16's that have been downloaded so far
+  let fft_size = fft.size;
   window.fft_size = fft_size;
-  let magnitude_max = state.fft.magnitudeMax;
-  let magnitude_min = state.fft.magnitudeMin;
+  let magnitude_max = fft.magnitudeMax;
+  let magnitude_min = fft.magnitudeMin;
+  console.log('magnitude_max:', magnitude_max);
   let num_ffts = Math.floor(blob_size / fft_size / 2); // divide by 2 because this is number of ints/floats not IQ samples
 
   let startTime = performance.now();
@@ -141,12 +142,12 @@ export const select_fft = (state) => {
 
   // Annotation portion
   let annotations_list = window.annotations;
-  for (let i = 0; i < state.meta.annotations.length; i++) {
-    let freq_lower_edge = state.meta.annotations[i]['core:freq_lower_edge'];
-    let freq_upper_edge = state.meta.annotations[i]['core:freq_upper_edge'];
-    let sample_start = state.meta.annotations[i]['core:sample_start'];
-    let sample_count = state.meta.annotations[i]['core:sample_count'];
-    let description = state.meta.annotations[i]['core:description'];
+  for (let i = 0; i < meta.annotations.length; i++) {
+    let freq_lower_edge = meta.annotations[i]['core:freq_lower_edge'];
+    let freq_upper_edge = meta.annotations[i]['core:freq_upper_edge'];
+    let sample_start = meta.annotations[i]['core:sample_start'];
+    let sample_count = meta.annotations[i]['core:sample_count'];
+    let description = meta.annotations[i]['core:description'];
     //console.log(freq_lower_edge, freq_upper_edge, sample_start, sample_count, description);
 
     // Calc the sample index of the first FFT being displayed
@@ -155,8 +156,8 @@ export const select_fft = (state) => {
     let samples_in_window = (blob_size - previous_blob_size) / 2;
     //console.log("samples_in_window:", samples_in_window);
     let stop_sample_index = start_sample_index + samples_in_window;
-    let center_frequency = state.meta.captures[0]['core:frequency'];
-    let sample_rate = state.meta.global['core:sample_rate'];
+    let center_frequency = meta.captures[0]['core:frequency'];
+    let sample_rate = meta.global['core:sample_rate'];
     window.sample_rate = sample_rate;
     let lower_freq = center_frequency - sample_rate / 2;
 

@@ -17,10 +17,10 @@ const Sidebar = (props) => {
             <Accordion.Header>Settings</Accordion.Header>
             <Accordion.Body>
               <SettingsPane
-                handleFftSize={props.handleFftSize}
-                handleMagnitudeMax={props.handleMagnitudeMax}
-                handleMagnitudeMin={props.handleMagnitudeMin}
                 updateBlobTaps={props.updateBlobTaps}
+                updateMagnitudeMax={props.updateMagnitudeMax}
+                updateMagnitudeMin={props.updateMagnitudeMin}
+                updateFftsize={props.updateFftsize}
                 meta={props.meta}
               />
             </Accordion.Body>

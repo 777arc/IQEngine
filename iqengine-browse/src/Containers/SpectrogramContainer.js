@@ -10,14 +10,16 @@ import {
   resetConnection,
 } from '../Store/Actions/ConnectionActions';
 import { initFetchMoreBlob, resetBlob, updateBlobTaps } from '../Store/Actions/BlobActions';
+import { updateFFTMagnitudeMax, updateFFTMagnitudeMin, updateFFTSize } from '../Store/Actions/FFTActions';
 import { fetchMetaDataBlob, resetMeta } from '../Store/Actions/FetchMetaActions';
 
 function mapStateToProps(state) {
-  const { connectionReducer, blobReducer, fetchMetaReducer } = state;
+  const { connectionReducer, blobReducer, fetchMetaReducer, fftReducer } = state;
   return {
     connection: { ...connectionReducer },
     blob: { ...blobReducer },
     meta: { ...fetchMetaReducer },
+    fft: { ...fftReducer },
   };
 }
 
@@ -31,6 +33,9 @@ function mapDispatchToProps(dispatch) {
     updateConnectionDataFileHandle: (handle) => dispatch(updateConnectionDataFileHandle(handle)),
     updateConnectionRecording: (recording) => dispatch(updateConnectionRecording(recording)),
     updateBlobTaps: (taps) => dispatch(updateBlobTaps(taps)),
+    updateMagnitudeMax: (x) => dispatch(updateFFTMagnitudeMax(x)),
+    updateMagnitudeMin: (x) => dispatch(updateFFTMagnitudeMin(x)),
+    updateFftsize: (x) => dispatch(updateFFTSize(x)),
     initFetchMoreBlob: (args) => dispatch(initFetchMoreBlob(args)),
     fetchMetaDataBlob: (connection) => dispatch(fetchMetaDataBlob(connection)),
     resetConnection: () => dispatch(resetConnection()),

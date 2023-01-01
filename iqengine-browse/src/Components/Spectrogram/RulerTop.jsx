@@ -5,7 +5,9 @@ import { select_fft } from '../../Utils/selector';
 import React, { useRef } from 'react';
 
 const RulerTop = (props) => {
-  let select_fft_return = select_fft(props);
+  let { blob, fft, meta } = props;
+
+  let select_fft_return = select_fft(blob, fft, meta);
 
   const canvasRulerRef = useRef(null);
   const canvas = canvasRulerRef.current;
