@@ -16,12 +16,11 @@ class SpectrogramPage extends Component {
   }
 
   componentDidMount() {
-    let { initFetchMoreBlob, fetchMetaDataBlob, connection, blob, meta, fft } = this.props;
+    let { fetchMetaDataBlob, connection } = this.props;
     window.iq_data = [];
     clear_fft_data();
 
     fetchMetaDataBlob(connection); // fetch the metadata
-    //initFetchMoreBlob({ connection: connection, blob: blob, meta: meta }); // fetch IQ for the first time
   }
 
   componentWillUnmount() {
