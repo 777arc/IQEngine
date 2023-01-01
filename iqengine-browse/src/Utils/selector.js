@@ -27,14 +27,12 @@ export const clear_fft_data = () => {
   window.fft_data = new Uint8ClampedArray(); // this is where our FFT outputs are stored
   window.annotations = []; // gets filled in before return
   window.sample_rate = 1; // will get filled in
-  window.fft_size = 1; // will get filled in
   window.iq_data = []; // initialized in blobSlice.js but we have to clear it each time we go to another spectrogram page
 };
 
 export const select_fft = (blob, fft, meta) => {
   let blob_size = blob.size; // this is actually the number of int16's that have been downloaded so far
   let fft_size = fft.size;
-  window.fft_size = fft_size;
   let magnitude_max = fft.magnitudeMax;
   let magnitude_min = fft.magnitudeMin;
   let num_ffts = Math.floor(blob_size / fft_size / 2); // divide by 2 because this is number of ints/floats not IQ samples
@@ -58,7 +56,7 @@ export const select_fft = (blob, fft, meta) => {
       image_data: new ImageData(window.fft_data, w, h),
       annotations: window.annotations,
       sample_rate: window.sample_rate,
-      fft_size: window.fft_size, // scales will break without this
+      fft_size: fft_size, // scales will break without this
     };
     return select_fft_return;
   }

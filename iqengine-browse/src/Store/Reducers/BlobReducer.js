@@ -37,6 +37,7 @@ const fetchMoreDataSuccessUpdates = (action) => {
   window.iq_data = new_iq_data;
   */
   window.iq_data.push(...action.payload); // this could replace the entire code above, as long as we only grab <=100k samples at a time (call stack limit)
+  console.log('window.iq_data length is now', window.iq_data.length);
 };
 
 export default function blobReducer(state = initialState, action) {
