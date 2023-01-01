@@ -12,6 +12,7 @@ import {
 import { initFetchMoreBlob, resetBlob, updateBlobTaps } from '../Store/Actions/BlobActions';
 import { updateFFTMagnitudeMax, updateFFTMagnitudeMin, updateFFTSize } from '../Store/Actions/FFTActions';
 import { fetchMetaDataBlob, resetMeta } from '../Store/Actions/FetchMetaActions';
+import { resetFFT } from '../Store/Actions/FFTActions';
 
 function mapStateToProps(state) {
   const { connectionReducer, blobReducer, fetchMetaReducer, fftReducer } = state;
@@ -41,6 +42,7 @@ function mapDispatchToProps(dispatch) {
     resetConnection: () => dispatch(resetConnection()),
     resetMeta: () => dispatch(resetMeta()),
     resetBlob: () => dispatch(resetBlob()),
+    resetFFT: () => dispatch(resetFFT()),
   };
 }
 

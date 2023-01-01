@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UPDATE_FFT_MAGNITUDE_MAX, UPDATE_FFT_MAGNITUDE_MIN, UPDATE_FFT_SIZE } from '../../Constants/FFTTypes';
+import { UPDATE_FFT_MAGNITUDE_MAX, UPDATE_FFT_MAGNITUDE_MIN, UPDATE_FFT_SIZE, RESET_FFT_OBJ } from '../../Constants/FFTTypes';
 
 const initialState = {
   size: 1024,
@@ -26,6 +26,13 @@ export default function fftReducer(state = initialState, action) {
         ...state,
         magnitudeMin: action.payload,
       };
+    case RESET_FFT_OBJ: {
+      return {
+        size: 1024,
+        magnitudeMax: 255,
+        magnitudeMin: 30,
+      };
+    }
     default:
       return {
         ...state,

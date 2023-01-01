@@ -1,4 +1,4 @@
-import { UPDATE_FFT_MAGNITUDE_MAX, UPDATE_FFT_MAGNITUDE_MIN, UPDATE_FFT_SIZE } from '../../Constants/FFTTypes';
+import { UPDATE_FFT_MAGNITUDE_MAX, UPDATE_FFT_MAGNITUDE_MIN, UPDATE_FFT_SIZE, RESET_FFT_OBJ } from '../../Constants/FFTTypes';
 
 export const updateFFTSize = (payload) => ({
   type: UPDATE_FFT_SIZE,
@@ -15,4 +15,8 @@ export function updateFFTMagnitudeMax(payload) {
 export const updateFFTMagnitudeMin = (payload) => ({
   type: UPDATE_FFT_MAGNITUDE_MIN,
   payload,
+});
+
+export const resetFFT = () => ({
+  type: RESET_FFT_OBJ,
 });

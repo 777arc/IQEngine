@@ -29,6 +29,7 @@ class SpectrogramPage extends Component {
     this.props.resetMeta();
     window.iq_data = [];
     this.props.resetBlob();
+    this.props.resetFFT();
   }
 
   // Not sure why we can do fft but not blob (we have to do blob.size)?
