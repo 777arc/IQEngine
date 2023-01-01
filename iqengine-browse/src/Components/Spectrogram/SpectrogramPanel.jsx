@@ -19,20 +19,22 @@ const SpectrogramPanel = (props) => {
   let { initFetchMoreBlob, connection, blob, meta } = props;
   let { size, status } = props.blob;
 
+  // hooks let you use state and other React features without writing a class, useEffect lets you perform side effects in function components
   useEffect(() => {
     // function has to be defined inside of the useEffect or else it throws a warning
     function handleScroll() {
       const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
       const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
-
+      console.log('****** scrollTop:', scrollTop, 'window.innerHeight:', window.innerHeight, 'scrollHeight:', scrollHeight);
+      // This is the logic that detects being close to the bottom of the scroll range
       if (!isBottom && scrollTop + window.innerHeight + 50 >= scrollHeight) {
         setIsBottom(true);
-        console.log('Setting Scroll Bottom! Current Blobsize: ' + size);
+        console.log('Setting Scroll Bottom!');
       }
     }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isBottom, size]);
+  }, [isBottom]);
 
   const checkSize = () => {
     const panel = document.getElementById('spectrogram-panel');
@@ -42,6 +44,7 @@ const SpectrogramPanel = (props) => {
     });
   };
 
+  // this one appears to happen once at the beginning but never again, even if you resize your window
   useEffect(() => {
     window.scrollTo(0, 0);
     checkSize();
@@ -51,18 +54,18 @@ const SpectrogramPanel = (props) => {
 
   useEffect(() => {
     if (isBottom) {
-      console.log('Fetching more Data! Current Blobsize: ' + size);
-      blob.size = size;
+      console.log('Fetching more Data!');
+      // Call fetch more multiple times since it only grabs a few dozen rows each call
       initFetchMoreBlob({ connection: connection, blob: blob, meta: meta });
     }
-  }, [isBottom, size, initFetchMoreBlob, blob, connection, meta]);
+  }, [isBottom, initFetchMoreBlob, blob, connection, meta]);
 
   useEffect(() => {
     if (isBottom && status === 'idle') {
-      console.log('Finished loading more DATA! - unsetting bottom - Current Blobsize: ' + size);
+      console.log('Finished loading more DATA! - unsetting bottom');
       setIsBottom(false);
     }
-  }, [isBottom, status, size]);
+  }, [isBottom, status]);
 
   return (
     <div>
