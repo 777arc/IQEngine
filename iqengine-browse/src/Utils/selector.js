@@ -37,7 +37,6 @@ export const select_fft = (blob, fft, meta) => {
   window.fft_size = fft_size;
   let magnitude_max = fft.magnitudeMax;
   let magnitude_min = fft.magnitudeMin;
-  console.log('magnitude_max:', magnitude_max);
   let num_ffts = Math.floor(blob_size / fft_size / 2); // divide by 2 because this is number of ints/floats not IQ samples
 
   let startTime = performance.now();

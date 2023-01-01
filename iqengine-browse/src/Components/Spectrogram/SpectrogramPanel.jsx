@@ -26,7 +26,6 @@ const SpectrogramPanel = (props) => {
     function handleScroll() {
       const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
       const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
-      console.log('****** scrollTop:', scrollTop, 'window.innerHeight:', window.innerHeight, 'scrollHeight:', scrollHeight);
       // This is the logic that detects being close to the bottom of the scroll range
       if (!isBottom && scrollTop + window.innerHeight + 50 >= scrollHeight) {
         setIsBottom(true);
