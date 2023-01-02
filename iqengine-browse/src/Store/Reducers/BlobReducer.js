@@ -18,28 +18,6 @@ const initialState = {
   taps: new Float32Array(1).fill(1),
 };
 
-const fetchMoreDataSuccessUpdates = (action) => {
-  /*
-  let size = window.iq_data.length + action.payload.length; // Don't use byte length because the new array has to be specified by the num of elements not bytes
-  // Copy existing IQ samples to new_iq_data, then append the new IQ samples, then save it back to window.iq_data
-  let new_iq_data;
-  // TODO: would be nice to get rid of window.data_type and just have it only stored in meta
-  if (window.data_type === 'ci16_le') {
-    new_iq_data = new Int16Array(size);
-  } else if (window.data_type === 'cf32_le') {
-    new_iq_data = new Float32Array(size);
-  } else {
-    console.error('unsupported data_type');
-    new_iq_data = new Int16Array(size);
-  }
-  new_iq_data.set(window.iq_data, 0); // 2nd arg of set() is the offset into the target array at which to begin writing values from the source array
-  new_iq_data.set(action.payload, window.iq_data.length); // see above comment.  units are elements, not bytes!
-  window.iq_data = new_iq_data;
-  */
-  window.iq_data.push(...action.payload); // this could replace the entire code above, as long as we only grab <=100k samples at a time (call stack limit)
-  console.log('window.iq_data length is now', window.iq_data.length);
-};
-
 export default function blobReducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_BLOB_TAPS:
@@ -59,7 +37,8 @@ export default function blobReducer(state = initialState, action) {
       };
     case FETCH_MORE_DATA_SUCCESS:
       const size = window.iq_data.length + action.payload.length; // payload is the new samples downloaded
-      fetchMoreDataSuccessUpdates(action);
+      window.iq_data.push(...action.payload); // this replaces the code above, as long as we only grab <=100k samples at a time (call stack limit)
+      console.log('window.iq_data length is now', window.iq_data.length);
       return {
         ...state,
         status: 'idle',
