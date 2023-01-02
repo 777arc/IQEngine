@@ -16,11 +16,10 @@ let previous_magnitude_min = 0;
 window.fft_data = new Uint8ClampedArray(); // this is where our FFT outputs are stored
 window.annotations = []; // gets filled in before return
 window.sample_rate = 1; // will get filled in
-window.fft_size = 1; // will get filled in
 
 // This will get called when we go to a new spectrogram page
 export const clear_fft_data = () => {
-  previous_blob_size = -1;
+  previous_blob_size = 0;
   previous_fft_size = 0;
   previous_magnitude_max = 0;
   previous_magnitude_min = 0;
@@ -31,18 +30,13 @@ export const clear_fft_data = () => {
 };
 
 export const select_fft = (blob, fft, meta) => {
-  let blob_size = blob.size; // this is actually the number of int16's that have been downloaded so far
-  console.log('===== blob_size', blob_size);
+  let blob_size = window.iq_data.length; // this is actually the number of int16's that have been downloaded so far
   let fft_size = fft.size;
   let magnitude_max = fft.magnitudeMax;
   let magnitude_min = fft.magnitudeMin;
   let num_ffts = Math.floor(blob_size / fft_size / 2); // divide by 2 because this is number of ints/floats not IQ samples
 
   let startTime = performance.now();
-  const pxPerLine = fft_size;
-  const lines = num_ffts;
-  const w = pxPerLine;
-  const h = lines;
 
   // has there been any changes since we last rendered the FFT?  if not just return the existing fft_data
   if (
@@ -54,7 +48,7 @@ export const select_fft = (blob, fft, meta) => {
     )
   ) {
     let select_fft_return = {
-      image_data: new ImageData(window.fft_data, w, h),
+      image_data: new ImageData(window.fft_data, fft_size, num_ffts),
       annotations: window.annotations,
       sample_rate: window.sample_rate,
       fft_size: fft_size, // scales will break without this
@@ -67,19 +61,11 @@ export const select_fft = (blob, fft, meta) => {
   if (num_ffts === 0) {
     return null;
   }
-  const clearBuf = new ArrayBuffer(pxPerLine * lines * 4); // fills with 0s ie. rgba 0,0,0,0 = transparent
+  const clearBuf = new ArrayBuffer(fft_size * num_ffts * 4); // fills with 0s ie. rgba 0,0,0,0 = transparent
   let new_fft_data = new Uint8ClampedArray(clearBuf);
   let startOfs = 0;
 
-  // Fill with zeros
-  for (let i = 0; i < pxPerLine * lines * 4; i += 4) {
-    // byte reverse so number aa bb gg rr
-    new_fft_data[i] = colMap[0][0]; // red
-    new_fft_data[i + 1] = colMap[0][1]; // green
-    new_fft_data[i + 2] = colMap[0][2]; // blue
-    new_fft_data[i + 3] = colMap[0][3]; // alpha
-  }
-  // initialize the direction and first line position
+  // if only the blob size changed, none of the other params, then initialize the direction and first line position
   if (fft_size === previous_fft_size && magnitude_min === previous_magnitude_min && magnitude_max === previous_magnitude_max) {
     starting_row = Math.floor(previous_blob_size / fft_size / 2);
     new_fft_data.set(window.fft_data, 0);
@@ -117,15 +103,12 @@ export const select_fft = (blob, fft, meta) => {
     magnitudes = magnitudes.map((x) => x / ((magnitude_max - magnitude_min) / 255));
     magnitudes = magnitudes.map((x) => x - magnitude_min);
 
-    //const magnitude = ((magnitudeDivider || 10000) < 0 ? 10000 : (magnitudeDivider || 10000));
-    //magnitudes = magnitudes.map(x => x / magnitude);
-
     // Clip from 0 to 255 and convert to ints
     magnitudes = magnitudes.map((x) => (x > 255 ? 255 : x)); // clip above 255
     magnitudes = magnitudes.map((x) => (x < 0 ? 0 : x)); // clip below 0
     let ipBuf8 = Uint8ClampedArray.from(magnitudes); // anything over 255 or below 0 at this point will become a random number
-    let line_offset = i * pxPerLine * 4;
-    for (let sigVal, rgba, opIdx = 0, ipIdx = startOfs; ipIdx < pxPerLine + startOfs; opIdx += 4, ipIdx++) {
+    let line_offset = i * fft_size * 4;
+    for (let sigVal, rgba, opIdx = 0, ipIdx = startOfs; ipIdx < fft_size + startOfs; opIdx += 4, ipIdx++) {
       sigVal = ipBuf8[ipIdx] || 0; // if input line too short add zeros
       rgba = colMap[sigVal]; // array of rgba values
       // byte reverse so number aa bb gg rr
@@ -146,13 +129,10 @@ export const select_fft = (blob, fft, meta) => {
     let sample_start = meta.annotations[i]['core:sample_start'];
     let sample_count = meta.annotations[i]['core:sample_count'];
     let description = meta.annotations[i]['core:description'];
-    //console.log(freq_lower_edge, freq_upper_edge, sample_start, sample_count, description);
 
     // Calc the sample index of the first FFT being displayed
     let start_sample_index = previous_blob_size / 2; // blob size is in units of ints/floats that have been downloaded, and its two per sample
-    //console.log("start_sample_index:", start_sample_index);
     let samples_in_window = (blob_size - previous_blob_size) / 2;
-    //console.log("samples_in_window:", samples_in_window);
     let stop_sample_index = start_sample_index + samples_in_window;
     let center_frequency = meta.captures[0]['core:frequency'];
     let sample_rate = meta.global['core:sample_rate'];
@@ -177,6 +157,10 @@ export const select_fft = (blob, fft, meta) => {
   previous_magnitude_min = magnitude_min;
   window.fft_data = new_fft_data;
 
-  let select_fft_return = { image_data: new ImageData(window.fft_data, w, h), annotations: window.annotations, sample_rate: window.sample_rate };
+  let select_fft_return = {
+    image_data: new ImageData(window.fft_data, fft_size, num_ffts),
+    annotations: window.annotations,
+    sample_rate: window.sample_rate,
+  };
   return select_fft_return;
 };
