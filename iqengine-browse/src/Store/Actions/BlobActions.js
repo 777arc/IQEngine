@@ -35,4 +35,4 @@ export const resetBlob = () => ({
   type: RESET_BLOB_OBJ,
 });
 
-export const initFetchMoreBlob = (args) => FetchMoreData(args);
+export const fetchMoreData = (args) => FetchMoreData(args);

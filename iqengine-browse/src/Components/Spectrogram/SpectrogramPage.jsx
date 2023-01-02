@@ -66,7 +66,7 @@ class SpectrogramPage extends Component {
             </Col>
             <Col>
               <SpectrogramPanel
-                initFetchMoreBlob={this.props.initFetchMoreBlob}
+                fetchMoreData={this.props.fetchMoreData}
                 connection={this.state.connection}
                 updateBlobSize={this.props.updateBlobSize}
                 fft={fft}

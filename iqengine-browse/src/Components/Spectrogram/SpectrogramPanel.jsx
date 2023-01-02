@@ -17,7 +17,7 @@ const SpectrogramPanel = (props) => {
 
   let spectrogram_width = dimensions.width - text_width - timescale_width;
 
-  let { initFetchMoreBlob, updateBlobSize, connection, blob, meta } = props;
+  let { fetchMoreData, updateBlobSize, connection, blob, meta } = props;
   let { status } = props.blob;
 
   // hooks let you use state and other React features without writing a class, useEffect lets you perform side effects in function components
@@ -58,11 +58,11 @@ const SpectrogramPanel = (props) => {
       console.log('Fetching more Data!');
       // Call fetch more multiple times since it only grabs a few dozen rows each call
       for (let i = 0; i < FETCHES_PER_USEEFFECT; i++) {
-        initFetchMoreBlob({ connection: connection, blob: blob, meta: meta });
+        fetchMoreData({ connection: connection, blob: blob, meta: meta });
         updateBlobSize(blob.size + COUNT_PER_FETCH);
       }
     }
-  }, [isBottom, initFetchMoreBlob, blob, connection, meta]);
+  }, [isBottom, fetchMoreData, updateBlobSize, status, blob, connection, meta]);
 
   useEffect(() => {
     if (isBottom && status === 'idle') {
