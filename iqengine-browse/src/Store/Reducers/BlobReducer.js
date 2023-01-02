@@ -30,21 +30,21 @@ export default function blobReducer(state = initialState, action) {
         ...state,
         size: action.payload,
       };
-    case FETCH_MORE_DATA_LOADING:
+    case FETCH_MORE_DATA_LOADING: // FetchMoreData/pending, where FetchMoreData is the async thunk function
       return {
         ...state,
         status: 'loading',
       };
-    case FETCH_MORE_DATA_SUCCESS:
+    case FETCH_MORE_DATA_SUCCESS: // FetchMoreData/fulfilled, where FetchMoreData is the async thunk function
       const size = window.iq_data.length + action.payload.length; // payload is the new samples downloaded
-      window.iq_data.push(...action.payload); // this replaces the code above, as long as we only grab <=100k samples at a time (call stack limit)
+      window.iq_data.push(...action.payload); // adds new samples to iq_data.  works as long as we only grab <=100k samples at a time (call stack limit)
       console.log('window.iq_data length is now', window.iq_data.length);
       return {
         ...state,
         status: 'idle',
         size: size,
       };
-    case FETCH_MORE_DATA_FAILURE:
+    case FETCH_MORE_DATA_FAILURE: // FetchMoreData/rejected, where FetchMoreData is the async thunk function
       return {
         ...state,
         status: 'error',
