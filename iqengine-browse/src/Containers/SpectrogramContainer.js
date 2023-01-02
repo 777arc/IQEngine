@@ -9,7 +9,7 @@ import {
   updateConnectionRecording,
   resetConnection,
 } from '../Store/Actions/ConnectionActions';
-import { initFetchMoreBlob, resetBlob, updateBlobTaps } from '../Store/Actions/BlobActions';
+import { initFetchMoreBlob, resetBlob, updateBlobTaps, updateBlobSize } from '../Store/Actions/BlobActions';
 import { updateFFTMagnitudeMax, updateFFTMagnitudeMin, updateFFTSize } from '../Store/Actions/FFTActions';
 import { fetchMetaDataBlob, resetMeta } from '../Store/Actions/FetchMetaActions';
 import { resetFFT } from '../Store/Actions/FFTActions';
@@ -37,6 +37,7 @@ function mapDispatchToProps(dispatch) {
     updateMagnitudeMax: (x) => dispatch(updateFFTMagnitudeMax(x)),
     updateMagnitudeMin: (x) => dispatch(updateFFTMagnitudeMin(x)),
     updateFftsize: (x) => dispatch(updateFFTSize(x)),
+    updateBlobSize: (x) => dispatch(updateBlobSize(x)),
     initFetchMoreBlob: (args) => dispatch(initFetchMoreBlob(args)),
     fetchMetaDataBlob: (connection) => dispatch(fetchMetaDataBlob(connection)),
     resetConnection: () => dispatch(resetConnection()),

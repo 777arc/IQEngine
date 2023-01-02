@@ -5,7 +5,7 @@ import { SpectrogramViewer } from './SpectrogramViewer';
 import { AnnotationViewer } from './AnnotationViewer';
 import { RulerTop } from './RulerTop';
 import React, { useEffect, useState } from 'react';
-import { FETCHES_PER_USEEFFECT } from '../../Utils/constants';
+import { FETCHES_PER_USEEFFECT, COUNT_PER_FETCH } from '../../Utils/constants';
 
 const SpectrogramPanel = (props) => {
   const [isBottom, setIsBottom] = useState(false);
@@ -17,7 +17,7 @@ const SpectrogramPanel = (props) => {
 
   let spectrogram_width = dimensions.width - text_width - timescale_width;
 
-  let { initFetchMoreBlob, connection, blob, meta } = props;
+  let { initFetchMoreBlob, updateBlobSize, connection, blob, meta } = props;
   let { status } = props.blob;
 
   // hooks let you use state and other React features without writing a class, useEffect lets you perform side effects in function components
@@ -53,12 +53,13 @@ const SpectrogramPanel = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log('------------ isBottom:', isBottom, 'status:', status);
     if (isBottom) {
       console.log('Fetching more Data!');
       // Call fetch more multiple times since it only grabs a few dozen rows each call
       for (let i = 0; i < FETCHES_PER_USEEFFECT; i++) {
         initFetchMoreBlob({ connection: connection, blob: blob, meta: meta });
-        blob.size = blob.size + 102400;
+        updateBlobSize(blob.size + COUNT_PER_FETCH);
       }
     }
   }, [isBottom, initFetchMoreBlob, blob, connection, meta]);
