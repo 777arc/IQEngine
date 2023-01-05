@@ -50,8 +50,7 @@ class ConnectionStringInput extends Component {
     this.props.updateConnectionAccountName(accountName);
     this.props.updateConnectionContainerName(containerName);
     this.props.updateConnectionSasToken(sasToken);
-
-    this.props.setRecordingList(await GetFilesFromBlob(accountName, containerName, sasToken)); // updates the parent (App.js) state with the RecordingList
+    this.props.setRecordingList({ accountName: accountName, containerName: containerName, sasToken: sasToken }); // updates the parent (App.js) state with the RecordingList
   };
 
   render() {
